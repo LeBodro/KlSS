@@ -10,18 +10,19 @@ version: 2
           path: ./
 
 jobs:
-  - job: windows
-    <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'win-x64'
-  - job: linux
-    <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'linux-x64'
-  - job: macos
-    <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'osx-x64'
+  build:
+    windows:
+      <<: *job_configuration
+      variables:
+        buildConfiguration: 'release'
+        buildPlatform: 'win-x64'
+    linux:
+      <<: *job_configuration
+      variables:
+        buildConfiguration: 'release'
+        buildPlatform: 'linux-x64'
+    macos:
+      <<: *job_configuration
+      variables:
+        buildConfiguration: 'release'
+        buildPlatform: 'osx-x64'
