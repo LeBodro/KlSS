@@ -8,7 +8,7 @@ namespace MonoGame
 	class Root : Game
 	{
 		public const int LEVEL_COUNT = 6;
-		public const int SCALE = 3;
+		public const int SCALE = 4;
 		public const int SIZE_LENGTH = SCALE * GridPosition.CELL_SIZE * GridPosition.GRID_SIZE;
 
 		GraphicsDeviceManager graphics;
@@ -66,7 +66,7 @@ namespace MonoGame
 			sounds.Add("Step", Content.Load<SoundEffect>("step"));
 
 			// Preparing player
-			playerTex = Content.Load<Texture2D>("player12");
+			playerTex = Content.Load<Texture2D>("player" + GridPosition.CELL_SIZE);
 			playerSheet = new SpriteSheet(spriteBatch, playerTex, 2, 2);
 			player = new Player(playerSheet, 0);
 

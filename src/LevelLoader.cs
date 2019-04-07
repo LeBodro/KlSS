@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 public class LevelLoader
 {
-	const string LEVEL_NAME = "level{0}.txt";
+	const string LEVEL_NAME = "{0}/level{1}.txt";
 
 	const string EMPTY = ".";
 	const string WALL = "#";
@@ -35,9 +36,9 @@ public class LevelLoader
 	{
 		spriteBatch = _spriteBatch;
 		content = _content;
-		collectibleSheet = LoadSpriteSheet("collectibles12", 2, 2);
-		obstacleSheet = LoadSpriteSheet("obstacles12", 2, 2);
-		wallSheet = LoadSpriteSheet("walls12", 2, 2);
+		collectibleSheet = LoadSpriteSheet("collectibles" + GridPosition.CELL_SIZE, 2, 2);
+		obstacleSheet = LoadSpriteSheet("obstacles" + GridPosition.CELL_SIZE, 2, 2);
+		wallSheet = LoadSpriteSheet("walls" + GridPosition.CELL_SIZE, 2, 2);
 	}
 
 	SpriteSheet LoadSpriteSheet(string textureName, int rows, int columns)
@@ -52,51 +53,49 @@ public class LevelLoader
 		walls.SetAll(false);
 		items.Clear();
 		obstacles.Clear();
-		string fileName = string.Empty;
-		do
+		string fileName = string.Format(LEVEL_NAME, content.RootDirectory, levelId);
+		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
-			fileName = string.Format(LEVEL_NAME, levelId);
-			levelId--;
-		} while (!File.Exists(fileName) && levelId >= 0);
-		string[] lines = File.ReadAllLines(fileName);
-		for (int j = 0; j < GridPosition.GRID_SIZE; j++)
-		{
-			for (int i = 0; i < GridPosition.GRID_SIZE; i++)
+			for (int j = 0; j < GridPosition.GRID_SIZE; j++)
 			{
-				switch (lines[j].Substring(i, 1))
+				string line = reader.ReadLine();
+				for (int i = 0; i < GridPosition.GRID_SIZE; i++)
 				{
-					case EMPTY:
-						break;
-					case WALL:
-						walls[i + j * GridPosition.GRID_SIZE] = true;
-						break;
-					case SWORD:
-						CreateItem(Collectible.Type.SWORD, i, j);
-						break;
-					case SHIELD:
-						CreateItem(Collectible.Type.SHIELD, i, j);
-						break;
-					case HEART:
-						CreateItem(Collectible.Type.HEART, i, j);
-						break;
-					case KEY:
-						CreateItem(Collectible.Type.KEY, i, j);
-						break;
-					case PLAYER:
-						playerPosition = new GridPosition(i, j);
-						break;
-					case MONSTER:
-						CreateObstacle(Collectible.Type.SWORD, i, j);
-						break;
-					case DOOR:
-						CreateObstacle(Collectible.Type.KEY, i, j);
-						break;
-					case FIRE:
-						CreateObstacle(Collectible.Type.SHIELD, i, j);
-						break;
-					case LOVER:
-						CreateObstacle(Collectible.Type.HEART, i, j);
-						break;
+					switch (line.Substring(i, 1))
+					{
+						case EMPTY:
+							break;
+						case WALL:
+							walls[i + j * GridPosition.GRID_SIZE] = true;
+							break;
+						case SWORD:
+							CreateItem(Collectible.Type.SWORD, i, j);
+							break;
+						case SHIELD:
+							CreateItem(Collectible.Type.SHIELD, i, j);
+							break;
+						case HEART:
+							CreateItem(Collectible.Type.HEART, i, j);
+							break;
+						case KEY:
+							CreateItem(Collectible.Type.KEY, i, j);
+							break;
+						case PLAYER:
+							playerPosition = new GridPosition(i, j);
+							break;
+						case MONSTER:
+							CreateObstacle(Collectible.Type.SWORD, i, j);
+							break;
+						case DOOR:
+							CreateObstacle(Collectible.Type.KEY, i, j);
+							break;
+						case FIRE:
+							CreateObstacle(Collectible.Type.SHIELD, i, j);
+							break;
+						case LOVER:
+							CreateObstacle(Collectible.Type.HEART, i, j);
+							break;
+					}
 				}
 			}
 		}
