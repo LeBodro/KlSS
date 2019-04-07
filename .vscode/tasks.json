@@ -1,20 +1,20 @@
 {
-    "version": "2.0.0",
+	"version": "2.0.0",
 	"options": {
 		"cwd": "${workspaceRoot}",
 		"env": {
-            "BUILD_CMD": "dotnet build ${workspaceRoot}/project.csproj",
-            "RUN_CMD": "dotnet run ${workspaceRoot}/project.csproj",
-			"PUBLISH_CMD": "dotnet publish -r win-x64 -c Release ${workspaceRoot}/project.csproj --self-contained",
+			"BUILD_CMD": "dotnet build ${workspaceRoot}/KlSS.csproj",
+			"RUN_CMD": "dotnet run ${workspaceRoot}/KlSS.csproj",
+			"PUBLISH_CMD": "dotnet publish -r win-x64 -c release",
 			"BUILD": "Release"
-        }
-    },
+		}
+	},
 	"presentation": {
 		"echo": false,
 		"reveal": "always",
 		"focus": true,
 		"panel": "shared"
-    },
+	},
 	"tasks": [
 		{
 			"label": "Build & Run: Release",
@@ -86,5 +86,5 @@
 			},
 			"problemMatcher": []
 		},
-    ]
+	]
 }

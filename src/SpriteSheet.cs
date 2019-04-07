@@ -41,7 +41,7 @@ public class SpriteSheet
 			DepthStencilState.Default,
 			RasterizerState.CullNone,
 			null,
-			Matrix.CreateScale(MonoGame.Root.Scale)
+			Matrix.CreateScale(MonoGame.Root.SCALE)
 		);
 	}
 }

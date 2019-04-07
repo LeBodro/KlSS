@@ -2,7 +2,7 @@ using Microsoft.Xna.Framework;
 
 public class GridPosition
 {
-	public const int CELL_SIZE = 8;
+	public const int CELL_SIZE = 12;
 	public const int GRID_SIZE = 16;
 
 

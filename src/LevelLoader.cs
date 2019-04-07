@@ -35,9 +35,9 @@ public class LevelLoader
 	{
 		spriteBatch = _spriteBatch;
 		content = _content;
-		collectibleSheet = LoadSpriteSheet("collectibles", 2, 2);
-		obstacleSheet = LoadSpriteSheet("obstacles", 2, 2);
-		wallSheet = LoadSpriteSheet("walls", 1, 3);
+		collectibleSheet = LoadSpriteSheet("collectibles12", 2, 2);
+		obstacleSheet = LoadSpriteSheet("obstacles12", 2, 2);
+		wallSheet = LoadSpriteSheet("walls12", 2, 2);
 	}
 
 	SpriteSheet LoadSpriteSheet(string textureName, int rows, int columns)

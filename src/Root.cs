@@ -7,7 +7,8 @@ namespace MonoGame
 	class Root : Game
 	{
 		public const int LEVEL_COUNT = 6;
-		public static int Scale;
+		public const int SCALE = 3;
+		public const int SIZE_LENGTH = SCALE * GridPosition.CELL_SIZE * GridPosition.GRID_SIZE;
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -24,11 +25,9 @@ namespace MonoGame
 			graphics = new GraphicsDeviceManager(this);
 
 			// Window
-			graphics.PreferredBackBufferWidth = 512;
-			graphics.PreferredBackBufferHeight = 512;
+			graphics.PreferredBackBufferWidth = SIZE_LENGTH;
+			graphics.PreferredBackBufferHeight = SIZE_LENGTH;
 			graphics.PreferMultiSampling = false;
-
-			Scale = graphics.PreferredBackBufferWidth / 128;
 
 			// Fullscreen Window (Max Resolution)
 			//graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -59,8 +58,8 @@ namespace MonoGame
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// Preparing player
-			playerTex = Content.Load<Texture2D>("player");
-			playerSheet = new SpriteSheet(spriteBatch, playerTex, 4, 4);
+			playerTex = Content.Load<Texture2D>("player12");
+			playerSheet = new SpriteSheet(spriteBatch, playerTex, 2, 2);
 			player = new Player(playerSheet, 0);
 
 			// Prepare level loading
