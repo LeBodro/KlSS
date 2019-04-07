@@ -6,8 +6,8 @@ version: 2
   working_directory: ~/repo
   steps:
     - checkout
-    - script: dotnet build KlSS.csproj --configuration $(buildConfiguration)
-    - script: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
+    - run: dotnet build KlSS.csproj --configuration $(buildConfiguration)
+    - run: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
     - store_artifacts:
         path: ~/repo/
 
@@ -31,7 +31,7 @@ jobs:
 #    docker:
 #      - image: dosowisko/butler
 #    steps:
-#      - butler --help
+#      - run: butler --help
 
 workflows:
   version: 2
