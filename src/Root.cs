@@ -26,17 +26,9 @@ namespace MonoGame
 		{
 			graphics = new GraphicsDeviceManager(this);
 
-			// Window
 			graphics.PreferredBackBufferWidth = SIZE_LENGTH;
 			graphics.PreferredBackBufferHeight = SIZE_LENGTH;
 			graphics.PreferMultiSampling = false;
-
-			// Fullscreen Window (Max Resolution)
-			//graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-			//graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-
-			// Fullscreen (Max Resolution)
-			//graphics.IsFullScreen = true;
 
 			graphics.ApplyChanges();
 
@@ -118,7 +110,6 @@ namespace MonoGame
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			// TODO: Add your update logic here
 			inputs.Update();
 
 			base.Update(gameTime);
