@@ -6,27 +6,27 @@ version: 2
   working_directory: ~/repo
   steps:
     - checkout
-    - run: dotnet build KlSS.csproj --configuration $buildConfiguration
-    - run: dotnet publish -r $buildPlatform --configuration $buildConfiguration /p:TrimUnusedDependencies=true
+    - run: dotnet build KlSS.csproj --configuration $BUILDCONFIGURATION
+    - run: dotnet publish -r $BUILDPLATFORM --configuration $BUILDCONFIGURATION /p:TrimUnusedDependencies=true
     - store_artifacts:
         path: ~/repo/
 
 jobs:
   windows:
     <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'win-x64'
+    environment:
+      BUILDCONFIGURATION: 'release'
+      BUILDPLATFORM: 'win-x64'
   linux:
     <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'linux-x64'
+    environment:
+      BUILDCONFIGURATION: 'release'
+      BUILDPLATFORM: 'linux-x64'
   macos:
     <<: *job_configuration
-    variables:
-      buildConfiguration: 'release'
-      buildPlatform: 'osx-x64'
+    environment:
+      BUILDCONFIGURATION: 'release'
+      BUILDPLATFORM: 'osx-x64'
 #  deploy:
 #    docker:
 #      - image: dosowisko/butler
