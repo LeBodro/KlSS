@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,6 +13,7 @@ namespace MonoGame
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
+		AudioLibrary sounds;
 		Texture2D playerTex;
 		SpriteSheet playerSheet;
 		Player player;
@@ -56,6 +58,12 @@ namespace MonoGame
 		protected override void LoadContent()
 		{
 			spriteBatch = new SpriteBatch(GraphicsDevice);
+
+			// Load sounds
+			sounds = AudioLibrary.Instance;
+			sounds.Add("Destroy", Content.Load<SoundEffect>("destroy"));
+			sounds.Add("Win", Content.Load<SoundEffect>("win"));
+			sounds.Add("Step", Content.Load<SoundEffect>("step"));
 
 			// Preparing player
 			playerTex = Content.Load<Texture2D>("player12");

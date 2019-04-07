@@ -30,6 +30,7 @@ public class Level
 
 	void EndLevel()
 	{
+		AudioLibrary.Instance.Play("Win");
 		OnDone();
 	}
 
@@ -58,9 +59,17 @@ public class Level
 			{
 				item.HasMoved = false;
 				if (CheckForInterraction(item))
+				{
 					itemsToDestroy.Add(item);
+					if (item.type != Collectible.Type.HEART)
+						AudioLibrary.Instance.Play("Destroy");
+				}
+
 			}
 		}
+
+		if (itemsToDestroy.Count == 0)
+			AudioLibrary.Instance.Play("Step");
 
 		foreach (var item in itemsToDestroy)
 		{
