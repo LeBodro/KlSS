@@ -1,28 +1,43 @@
 version: 2
 
 .job_configuration: &job_configuration
-  pool:
-    vmImage: 'ubuntu-16.04'
-    steps:
-      - script: dotnet build KlSS.csproj --configuration $(buildConfiguration)
-      - script: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
-      - store_artifacts:
-          path: ./
+  docker:
+    - image: circleci/node:7.10
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - script: dotnet build KlSS.csproj --configuration $(buildConfiguration)
+    - script: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
+    - store_artifacts:
+        path: ~/repo/
 
 jobs:
-  build:
-    windows:
-      <<: *job_configuration
-      variables:
-        buildConfiguration: 'release'
-        buildPlatform: 'win-x64'
-    linux:
-      <<: *job_configuration
-      variables:
-        buildConfiguration: 'release'
-        buildPlatform: 'linux-x64'
-    macos:
-      <<: *job_configuration
-      variables:
-        buildConfiguration: 'release'
-        buildPlatform: 'osx-x64'
+  windows:
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'win-x64'
+  linux:
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'linux-x64'
+  macos:
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'osx-x64'
+#  deploy:
+#    docker:
+#      - image: dosowisko/butler
+#    steps:
+#      - butler --help
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - windows
+      - linux
+      - macos
+#      - deploy
