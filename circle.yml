@@ -2,14 +2,17 @@ version: 2
 
 .job_configuration: &job_configuration
   docker:
-    - image: gmantaos/monogame
+    - image: gableroux/dotnet-mono-monogame-tmp # this is until docker hub publishes the real images
   working_directory: ~/repo
   steps:
     - checkout
+    - run: dotnet restore
+    - run: chmod +x /root/.nuget/packages/monogame.content.builder/3.7.0.4/build/MGCB/build/ffprobe
+    - run: chmod +x /root/.nuget/packages/monogame.content.builder/3.7.0.4/build/MGCB/build/ffmpeg
     - run: dotnet build KlSS.csproj --configuration $BUILDCONFIGURATION
     - run: dotnet publish -r $BUILDPLATFORM --configuration $BUILDCONFIGURATION /p:TrimUnusedDependencies=true
     - store_artifacts:
-        path: ~/repo/
+        path: ~/repo/bin/release/netcoreapp2.2/$BUILDPLATFORM/publish
 
 jobs:
   windows:
@@ -27,11 +30,6 @@ jobs:
     environment:
       BUILDCONFIGURATION: 'release'
       BUILDPLATFORM: 'osx-x64'
-#  deploy:
-#    docker:
-#      - image: dosowisko/butler
-#    steps:
-#      - run: butler --help
 
 workflows:
   version: 2
@@ -40,4 +38,3 @@ workflows:
       - windows
       - linux
       - macos
-#      - deploy
