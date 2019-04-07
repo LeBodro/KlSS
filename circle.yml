@@ -1,3 +1,5 @@
+version: 2
+
 .job_configuration: &job_configuration
   pool:
     vmImage: 'ubuntu-16.04'
@@ -6,6 +8,7 @@
       - script: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
       - store_artifacts:
           path: ./
+
 jobs:
   - job: windows
     <<: *job_configuration
