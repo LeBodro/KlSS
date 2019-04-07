@@ -1,0 +1,24 @@
+.job_configuration: &job_configuration
+  pool:
+    vmImage: 'ubuntu-16.04'
+    steps:
+      - script: dotnet build KlSS.csproj --configuration $(buildConfiguration)
+      - script: dotnet publish -r $(buildPlatform) --configuration $(buildConfiguration) /p:TrimUnusedDependencies=true
+      - store_artifacts:
+          path: ./
+jobs:
+  - job: windows
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'win-x64'
+  - job: linux
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'linux-x64'
+  - job: macos
+    <<: *job_configuration
+    variables:
+      buildConfiguration: 'release'
+      buildPlatform: 'osx-x64'
