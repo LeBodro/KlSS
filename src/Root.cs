@@ -7,7 +7,6 @@ namespace MonoGame
 {
 	class Root : Game
 	{
-		public const int LEVEL_COUNT = 6;
 		public const int SCALE = 4;
 		public const int SIZE_LENGTH = SCALE * GridPosition.CELL_SIZE * GridPosition.GRID_SIZE;
 
@@ -21,6 +20,7 @@ namespace MonoGame
 		LevelLoader loader;
 		Level playingLevel;
 		int currentLevel = 0;
+		bool isLevelEditorOpened = false;
 
 		public Root()
 		{
@@ -29,8 +29,6 @@ namespace MonoGame
 			graphics.PreferredBackBufferWidth = SIZE_LENGTH;
 			graphics.PreferredBackBufferHeight = SIZE_LENGTH;
 			graphics.PreferMultiSampling = false;
-
-			graphics.ApplyChanges();
 
 			Content.RootDirectory = "Content";
 			IsMouseVisible = true;
@@ -66,16 +64,18 @@ namespace MonoGame
 			loader = new LevelLoader(spriteBatch, Content);
 			LoadLevel();
 
-			// Prepare inputs
+			// Player inputs
 			inputs = new Command();
 			inputs.Map(Keys.Left, Command.Event.JUST_DOWN, () => MovePlayer(Sprite.Direction.LEFT));
 			inputs.Map(Keys.Right, Command.Event.JUST_DOWN, () => MovePlayer(Sprite.Direction.RIGHT));
 			inputs.Map(Keys.Up, Command.Event.JUST_DOWN, () => MovePlayer(Sprite.Direction.UP));
 			inputs.Map(Keys.Down, Command.Event.JUST_DOWN, () => MovePlayer(Sprite.Direction.DOWN));
 
+			// System inputs
 			inputs.Map(Keys.Space, Command.Event.JUST_DOWN, LoadLevel);
 			inputs.Map(Keys.PageUp, Command.Event.JUST_DOWN, LoadNextLevel);
 			inputs.Map(Keys.PageDown, Command.Event.JUST_DOWN, LoadPreviousLevel);
+			inputs.Map(Keys.E, Command.Event.JUST_DOWN, ToggleLevelEditor);
 		}
 
 		void MovePlayer(Sprite.Direction direction)
@@ -86,7 +86,7 @@ namespace MonoGame
 
 		void LoadNextLevel()
 		{
-			currentLevel = (currentLevel + 1) % LEVEL_COUNT;
+			currentLevel = (currentLevel + 1) % loader.LevelCount;
 			LoadLevel();
 		}
 
@@ -103,6 +103,13 @@ namespace MonoGame
 			player.Reset();
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
+		}
+
+		void ToggleLevelEditor()
+		{
+			isLevelEditorOpened = !isLevelEditorOpened;
+			graphics.PreferredBackBufferWidth += (isLevelEditorOpened ? 1 : -1) * GridPosition.CELL_SIZE * 3 * SCALE;
+			graphics.ApplyChanges();
 		}
 
 		protected override void Update(GameTime gameTime)
