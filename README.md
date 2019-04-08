@@ -1,4 +1,7 @@
 # KlSS
+
+[![CircleCI](https://circleci.com/gh/lebodro/KlSS.svg?style=svg)](https://circleci.com/gh/lebodro/KlSS)
+
 Simple puzzle game made with MonoGame.
 
 ## Build and Run
