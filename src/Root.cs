@@ -13,8 +13,8 @@ namespace MonoGame
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
 		AudioLibrary sounds;
-		Texture2D playerTex;
-		SpriteSheet playerSheet;
+		Texture2D atlasTex;
+		SpriteSheet atlas;
 		Player player;
 		Command inputs;
 		LevelLoader loader;
@@ -56,9 +56,9 @@ namespace MonoGame
 			sounds.Add("Step", Content.Load<SoundEffect>("step"));
 
 			// Preparing player
-			playerTex = Content.Load<Texture2D>("player" + GridPosition.CELL_SIZE);
-			playerSheet = new SpriteSheet(spriteBatch, playerTex, 2, 2);
-			player = new Player(playerSheet, 0);
+			atlasTex = Content.Load<Texture2D>("atlas" + GridPosition.CELL_SIZE);
+			atlas = new SpriteSheet(spriteBatch, atlasTex, 3, 4);
+			player = new Player(atlas, 10);
 
 			// Prepare level loading
 			loader = new LevelLoader(spriteBatch, Content);
