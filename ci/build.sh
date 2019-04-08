@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -x
 set -e
@@ -8,7 +8,7 @@ export BUILD_CONFIGURATION='release'
 
 export ARTIFACT_FILENAME=${PROJECT_NAME}-${BUILD_PLATFORM}.zip
 export ARTIFACTS_DIR=/root/repo/artifacts
-export ARTIFACT_FULL_PATH=${ARTIFACTS_DIR}/${OUTPUT_FILE}
+export ARTIFACT_FULL_PATH=${ARTIFACTS_DIR}/${ARTIFACT_FILENAME}
 
 export PUBLISH_DIR=/root/repo/bin/release/netcoreapp2.2/${BUILD_PLATFORM}/publish
 export MGCB_VERSION=3.7.0.4
