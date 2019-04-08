@@ -61,9 +61,12 @@ namespace MonoGame
 			atlas = new SpriteSheet(spriteBatch, atlasTex, 3, 4);
 			player = new Player(atlas, 10);
 
+			Texture2D editorTex = Content.Load<Texture2D>("editorAtlas");
+			SpriteSheet editorAtlas = new SpriteSheet(spriteBatch, editorTex, 4, 4);
+
 			// Prepare level loading
 			loader = new LevelLoader(atlas, Content);
-			editor = new LevelEditor(atlas, atlas);
+			editor = new LevelEditor(atlas, editorAtlas);
 			editor.Player = player;
 			LoadLevel();
 

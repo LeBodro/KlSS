@@ -173,6 +173,8 @@ public class Level
 				if (item.Index == index)
 					dItem = item;
 			items.Remove(dItem);
+			if (dItem.type == Collectible.Type.HEART)
+				dItem.OnDeath -= EndLevel;
 			if (dItem != null) dItem.Kill();
 			Interractable dObstacle = null;
 			foreach (var item in obstacles)

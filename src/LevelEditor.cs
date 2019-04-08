@@ -40,6 +40,11 @@ public class LevelEditor
 		{
 			gameAtlas.Draw(i, pos);
 			pos.Y += GridPosition.CELL_SIZE;
+			if (brush == i)
+			{
+				GridPosition cursor = new GridPosition(16, i);
+				editorAtlas.Draw(14, cursor.ToVector());
+			}
 		}
 	}
 
@@ -57,7 +62,10 @@ public class LevelEditor
 		else if (brush == 9)
 			Target.SetWall(position.Index);
 		else if (brush == 10)
+		{
 			Player.MoveTo(position);
+			Target.Empty(Player.Index);
+		}
 	}
 
 	bool IsWithinBrushSelector(GridPosition pos)
