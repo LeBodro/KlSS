@@ -2,7 +2,7 @@ version: 2
 
 .job_configuration: &job_configuration
   docker:
-    - image: gableroux/dotnet-mono-monogame-tmp # this is until docker hub publishes the real images
+    - image: gableroux/dotnet-mono-monogame:latest
   working_directory: ~/repo
   steps:
     - checkout
