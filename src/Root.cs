@@ -21,7 +21,7 @@ namespace MonoGame
 		Level playingLevel;
 		LevelEditor editor;
 		int currentLevel = 0;
-		bool isLevelEditorOpened = false;
+		bool isInLevelEditMode = false;
 
 		public Root()
 		{
@@ -92,6 +92,7 @@ namespace MonoGame
 
 		void LoadNextLevel()
 		{
+			// TODO: if in level editor, this should load a wall-filled basic level template
 			currentLevel = (currentLevel + 1) % loader.LevelCount;
 			LoadLevel();
 		}
@@ -105,7 +106,10 @@ namespace MonoGame
 		void LoadLevel()
 		{
 			playingLevel = loader.Load(currentLevel);
-			playingLevel.OnDone += LoadNextLevel;
+			if (isInLevelEditMode)
+				playingLevel.OnDone += LoadLevel;
+			else
+				playingLevel.OnDone += LoadNextLevel;
 			player.Reset();
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
@@ -114,8 +118,18 @@ namespace MonoGame
 
 		void ToggleLevelEditor()
 		{
-			isLevelEditorOpened = !isLevelEditorOpened;
-			graphics.PreferredBackBufferWidth += (isLevelEditorOpened ? 1 : -1) * GridPosition.CELL_SIZE * 3 * SCALE;
+			isInLevelEditMode = !isInLevelEditMode;
+			if (isInLevelEditMode)
+			{
+				playingLevel.OnDone -= LoadNextLevel;
+				playingLevel.OnDone += LoadLevel;
+			}
+			else
+			{
+				playingLevel.OnDone -= LoadLevel;
+				playingLevel.OnDone += LoadNextLevel;
+			}
+			graphics.PreferredBackBufferWidth += (isInLevelEditMode ? 1 : -1) * GridPosition.CELL_SIZE * 3 * SCALE;
 			graphics.ApplyChanges();
 		}
 
@@ -126,7 +140,7 @@ namespace MonoGame
 
 			inputs.Update();
 
-			if (isLevelEditorOpened)
+			if (isInLevelEditMode)
 				editor.Update();
 
 			base.Update(gameTime);
@@ -140,7 +154,7 @@ namespace MonoGame
 			playingLevel.Draw();
 			player.Draw();
 
-			if (isLevelEditorOpened)
+			if (isInLevelEditMode)
 				editor.Draw();
 
 			base.Draw(gameTime);
