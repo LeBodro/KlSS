@@ -19,6 +19,7 @@ namespace MonoGame
 		Command inputs;
 		LevelLoader loader;
 		Level playingLevel;
+		LevelEditor editor;
 		int currentLevel = 0;
 		bool isLevelEditorOpened = false;
 
@@ -62,6 +63,8 @@ namespace MonoGame
 
 			// Prepare level loading
 			loader = new LevelLoader(atlas, Content);
+			editor = new LevelEditor(atlas, atlas);
+			editor.Player = player;
 			LoadLevel();
 
 			// Player inputs
@@ -103,6 +106,7 @@ namespace MonoGame
 			player.Reset();
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
+			editor.Target = playingLevel;
 		}
 
 		void ToggleLevelEditor()
@@ -119,6 +123,9 @@ namespace MonoGame
 
 			inputs.Update();
 
+			if (isLevelEditorOpened)
+				editor.Update();
+
 			base.Update(gameTime);
 		}
 
@@ -129,6 +136,9 @@ namespace MonoGame
 			GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			playingLevel.Draw();
 			player.Draw();
+
+			if (isLevelEditorOpened)
+				editor.Draw();
 
 			base.Draw(gameTime);
 		}

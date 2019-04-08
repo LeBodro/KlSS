@@ -11,6 +11,11 @@ public class GridPosition
 	public int Y { get => _y; set { _y = value; Index = X + GRID_SIZE * Y; } }
 	public int Index { get; private set; }
 
+	public static GridPosition FromWindowCoordinates(int x, int y)
+	{
+		return new GridPosition(x / CELL_SIZE, y / CELL_SIZE);
+	}
+
 	public GridPosition(int x = 0, int y = 0)
 	{
 		_x = x;
