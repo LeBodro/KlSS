@@ -23,12 +23,19 @@ public class LevelEditor
 		mouse = Mouse.GetState();
 		if (mouse.LeftButton == ButtonState.Pressed)
 		{
-			GridPosition gridPos = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
-			if (gridPos.X < GridPosition.GRID_SIZE)
-				Paint(gridPos);
-			else if (IsWithinBrushSelector(gridPos))
-				SelectBrush(gridPos.Y);
+			GridPosition click = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
+			if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+
+			if (click.X < GridPosition.GRID_SIZE)
+				Paint(click);
+			else if (IsWithinBrushSelector(click))
+				SelectBrush(click.Y);
 		}
+	}
+
+	bool IsOutOfBounds(GridPosition pos)
+	{
+		return !(pos.X >= 0 && pos.X < 19 && pos.Y >= 0 && pos.Y < 16);
 	}
 
 	public void Draw()
