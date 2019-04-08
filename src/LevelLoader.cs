@@ -32,6 +32,8 @@ public class LevelLoader
 	SpriteSheet obstacleSheet;
 	SpriteSheet wallSheet;
 
+	public int LevelCount { get; private set; }
+
 	public LevelLoader(SpriteBatch _spriteBatch, ContentManager _content)
 	{
 		spriteBatch = _spriteBatch;
@@ -39,6 +41,16 @@ public class LevelLoader
 		collectibleSheet = LoadSpriteSheet("collectibles" + GridPosition.CELL_SIZE, 2, 2);
 		obstacleSheet = LoadSpriteSheet("obstacles" + GridPosition.CELL_SIZE, 2, 2);
 		wallSheet = LoadSpriteSheet("walls" + GridPosition.CELL_SIZE, 2, 2);
+		LevelCount = GetLevelCount();
+	}
+
+	int GetLevelCount()
+	{
+		string partialName = "level";
+		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, content.RootDirectory));
+		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.*");
+
+		return filesInDir.Length;
 	}
 
 	SpriteSheet LoadSpriteSheet(string textureName, int rows, int columns)
