@@ -23,7 +23,7 @@ public class Player : Sprite
 
 		base.Move(direction);
 		foreach (var item in attachedItems.Values)
-			item.Move(direction); // item should not be removed during movement. Add additional step
+			item.Move(direction);
 
 		FetchItemAt(Direction.UP);
 		FetchItemAt(Direction.DOWN);
