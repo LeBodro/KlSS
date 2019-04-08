@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+set -x
+set -e
+
 export PROJECT_NAME=KlSS
 export BUILD_CONFIGURATION='release'
 
@@ -27,5 +30,5 @@ dotnet build --configuration ${BUILD_CONFIGURATION}
 dotnet publish -r ${BUILD_PLATFORM} --configuration ${BUILD_CONFIGURATION} /p:TrimUnusedDependencies=true
 
 # artifacts
-mkdir ${ARTIFACTS_DIR}/
+mkdir -p ${ARTIFACTS_DIR}
 cd ${PUBLISH_DIR} && zip -r ${ARTIFACT_FULL_PATH} ./
