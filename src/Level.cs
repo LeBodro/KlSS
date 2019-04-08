@@ -149,4 +149,51 @@ public class Level
 		}
 		return null;
 	}
+
+	public void SetWall(int index)
+	{
+		RemoveAt(index);
+		walls[index] = true;
+	}
+
+	public void Empty(int index)
+	{
+		if (walls[index])
+			walls[index] = false;
+		else
+			RemoveAt(index);
+	}
+
+	public void RemoveAt(int index)
+	{
+		if (!walls[index])
+		{
+			Collectible dItem = null;
+			foreach (var item in items)
+				if (item.Index == index)
+					dItem = item;
+			items.Remove(dItem);
+			if (dItem != null) dItem.Kill();
+			Interractable dObstacle = null;
+			foreach (var item in obstacles)
+				if (item.Index == index)
+					dObstacle = item;
+			obstacles.Remove(dObstacle);
+			if (dObstacle != null) dObstacle.Kill();
+		}
+	}
+
+	public void Add(Collectible item)
+	{
+		RemoveAt(item.Index);
+		items.Add(item);
+		if (item.type == Collectible.Type.HEART)
+			item.OnDeath += EndLevel;
+	}
+
+	public void Add(Interractable obstacle)
+	{
+		RemoveAt(obstacle.Index);
+		obstacles.Add(obstacle);
+	}
 }

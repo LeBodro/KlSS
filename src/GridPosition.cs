@@ -26,6 +26,29 @@ public class GridPosition
 		Index = X + GRID_SIZE * Y;
 	}
 
+	public static bool operator ==(GridPosition a, GridPosition b)
+	{
+		return a.X == b.X && a.Y == b.Y;
+	}
+
+	public static bool operator !=(GridPosition a, GridPosition b)
+	{
+		return !(a == b);
+	}
+
+	public override bool Equals(object obj)
+	{
+		if (obj == null || GetType() != obj.GetType())
+			return false;
+
+		return this == (GridPosition)obj;
+	}
+
+	public override int GetHashCode()
+	{
+		return base.GetHashCode();
+	}
+
 	public Vector2 ToVector()
 	{
 		return CELL_SIZE * new Vector2(X, Y);

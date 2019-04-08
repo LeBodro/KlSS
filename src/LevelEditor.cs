@@ -24,7 +24,6 @@ public class LevelEditor
 		if (mouse.LeftButton == ButtonState.Pressed)
 		{
 			GridPosition gridPos = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
-			System.Console.Write(gridPos.ToString());
 			if (gridPos.X < GridPosition.GRID_SIZE)
 				Paint(gridPos);
 			else if (IsWithinBrushSelector(gridPos))
@@ -47,19 +46,18 @@ public class LevelEditor
 	void Paint(GridPosition position)
 	{
 		if (brush < 0 || brush > 10) return; // Invalid brush ID
+		if (Player.Index == position.Index) return; // Can't overwrite player
 
-		if (brush < 8)
-		{
-			// TODO: Remove existing item, Paint dynamic item
-		}
-		else if (brush < 10)
-		{
-			// TODO: Remove existing item, Paint wall/empty
-		}
+		if (brush < 4)
+			CreateObstacle((Collectible.Type)brush, position);
+		else if (brush < 8)
+			CreateItem((Collectible.Type)(brush - 4), position);
+		else if (brush == 8)
+			Target.Empty(position.Index);
+		else if (brush == 9)
+			Target.SetWall(position.Index);
 		else if (brush == 10)
-		{
 			Player.MoveTo(position);
-		}
 	}
 
 	bool IsWithinBrushSelector(GridPosition pos)
@@ -71,5 +69,19 @@ public class LevelEditor
 	{
 		brush = index;
 		// TODO: indicate selection
+	}
+
+	void CreateItem(Collectible.Type type, GridPosition pos)
+	{
+		var newItem = new Collectible(gameAtlas, type);
+		newItem.MoveTo(pos);
+		Target.Add(newItem);
+	}
+
+	void CreateObstacle(Collectible.Type type, GridPosition pos)
+	{
+		var newObstacle = new Interractable(gameAtlas, type);
+		newObstacle.MoveTo(pos);
+		Target.Add(newObstacle);
 	}
 }
