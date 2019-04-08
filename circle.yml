@@ -6,38 +6,22 @@ version: 2
   working_directory: ~/repo
   steps:
     - checkout
-    - run: dotnet restore
-    # workaround to ensure monogame.content.builder package
-    - run: dotnet build $PROJECT_NAME.csproj --configuration $BUILDCONFIGURATION || true
-    - run: chmod +x /root/.nuget/packages/monogame.content.builder/$MONOGAME_CONTENT_VERSION/build/MGCB/build/ffprobe
-    - run: chmod +x /root/.nuget/packages/monogame.content.builder/$MONOGAME_CONTENT_VERSION/build/MGCB/build/ffmpeg
-    # actual build
-    - run: dotnet build $PROJECT_NAME.csproj --configuration $BUILDCONFIGURATION
-    - run: dotnet publish -r $BUILDPLATFORM --configuration $BUILDCONFIGURATION /p:TrimUnusedDependencies=true
-    - run: apt-get update && apt-get install -y zip
-    - run: mkdir ~/repo/artifacts/
-    - run: cd ~/repo/bin/release/netcoreapp2.2/$BUILDPLATFORM/publish && zip -r ~/repo/artifacts/$PROJECT_NAME-$BUILDPLATFORM.zip ./
+    - run: ci/build.sh
     - store_artifacts:
         path: ~/repo/artifacts/
-
-environment:
-  BUILDCONFIGURATION: 'release'
-  PROJECT_NAME: KlSS
-  MONOGAME_CONTENT_VERSION: 3.7.0.4
-
 jobs:
   windows:
     <<: *job_configuration
     environment:
-      BUILDPLATFORM: 'win-x64'
+      BUILD_PLATFORM: 'win-x64'
   linux:
     <<: *job_configuration
     environment:
-      BUILDPLATFORM: 'linux-x64'
+      BUILD_PLATFORM: 'linux-x64'
   macos:
     <<: *job_configuration
     environment:
-      BUILDPLATFORM: 'osx-x64'
+      BUILD_PLATFORM: 'osx-x64'
 
 workflows:
   version: 2
@@ -46,4 +30,3 @@ workflows:
       - windows
       - linux
       - macos
-
