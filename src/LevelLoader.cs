@@ -26,21 +26,15 @@ public class LevelLoader
 	HashSet<Collectible> items = new HashSet<Collectible>();
 	HashSet<Interractable> obstacles = new HashSet<Interractable>();
 
-	SpriteBatch spriteBatch;
+	SpriteSheet atlas;
 	ContentManager content;
-	SpriteSheet collectibleSheet;
-	SpriteSheet obstacleSheet;
-	SpriteSheet wallSheet;
 
 	public int LevelCount { get; private set; }
 
-	public LevelLoader(SpriteBatch _spriteBatch, ContentManager _content)
+	public LevelLoader(SpriteSheet _atlas, ContentManager _content)
 	{
-		spriteBatch = _spriteBatch;
+		atlas = _atlas;
 		content = _content;
-		collectibleSheet = LoadSpriteSheet("collectibles" + GridPosition.CELL_SIZE, 2, 2);
-		obstacleSheet = LoadSpriteSheet("obstacles" + GridPosition.CELL_SIZE, 2, 2);
-		wallSheet = LoadSpriteSheet("walls" + GridPosition.CELL_SIZE, 2, 2);
 		LevelCount = GetLevelCount();
 	}
 
@@ -51,12 +45,6 @@ public class LevelLoader
 		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.*");
 
 		return filesInDir.Length;
-	}
-
-	SpriteSheet LoadSpriteSheet(string textureName, int rows, int columns)
-	{
-		var texture = content.Load<Texture2D>(textureName);
-		return new SpriteSheet(spriteBatch, texture, rows, columns);
 	}
 
 	public Level Load(int levelId)
@@ -111,19 +99,19 @@ public class LevelLoader
 				}
 			}
 		}
-		return new Level(walls, items, obstacles, wallSheet, playerPosition);
+		return new Level(walls, items, obstacles, atlas, playerPosition);
 	}
 
 	void CreateItem(Collectible.Type type, int x, int y)
 	{
-		var newItem = new Collectible(collectibleSheet, type);
+		var newItem = new Collectible(atlas, type);
 		newItem.MoveTo(x, y);
 		items.Add(newItem);
 	}
 
 	void CreateObstacle(Collectible.Type type, int x, int y)
 	{
-		var newObstacle = new Interractable(obstacleSheet, type);
+		var newObstacle = new Interractable(atlas, type);
 		newObstacle.MoveTo(x, y);
 		obstacles.Add(newObstacle);
 	}

@@ -87,7 +87,7 @@ public class Level
 			{
 				p.X = i % SIZE * GridPosition.CELL_SIZE;
 				p.Y = i / SIZE * GridPosition.CELL_SIZE;
-				sheet.Draw(0, p);
+				sheet.Draw(9, p);
 			}
 		}
 

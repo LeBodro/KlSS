@@ -61,7 +61,7 @@ namespace MonoGame
 			player = new Player(atlas, 10);
 
 			// Prepare level loading
-			loader = new LevelLoader(spriteBatch, Content);
+			loader = new LevelLoader(atlas, Content);
 			LoadLevel();
 
 			// Player inputs

@@ -12,7 +12,7 @@ public class Collectible : Sprite
 	public bool IsCollected { get; set; }
 	public bool HasMoved { get; set; }
 
-	public Collectible(SpriteSheet sheet, Type _type) : base(sheet, (int)_type)
+	public Collectible(SpriteSheet sheet, Type _type) : base(sheet, (int)_type + 4)
 	{
 		type = _type;
 	}
