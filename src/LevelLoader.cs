@@ -31,6 +31,11 @@ public class LevelLoader
 
 	public int LevelCount { get; private set; }
 
+	public static string GetLevelPath(int id)
+	{
+		return string.Format(LEVEL_NAME, "Content", id);
+	}
+
 	public LevelLoader(SpriteSheet _atlas, ContentManager _content)
 	{
 		atlas = _atlas;
@@ -42,7 +47,7 @@ public class LevelLoader
 	{
 		string partialName = "level";
 		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, content.RootDirectory));
-		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.*");
+		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.txt");
 
 		return filesInDir.Length;
 	}
@@ -53,7 +58,7 @@ public class LevelLoader
 		walls.SetAll(false);
 		items.Clear();
 		obstacles.Clear();
-		string fileName = string.Format(LEVEL_NAME, content.RootDirectory, levelId);
+		string fileName = GetLevelPath(levelId);
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
 			for (int j = 0; j < GridPosition.GRID_SIZE; j++)

@@ -1,13 +1,18 @@
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame;
 
 public class LevelEditor
 {
+	const int SAVE_X = 17;
+	const int SAVE_Y = 15;
+
 	SpriteSheet gameAtlas;
 	SpriteSheet editorAtlas;
 	MouseState mouse;
 	int brush;
+	Sprite saveButton;
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
@@ -16,6 +21,8 @@ public class LevelEditor
 	{
 		gameAtlas = _gameAtlas;
 		editorAtlas = _editorAtlas;
+		saveButton = new Sprite(editorAtlas, 12);
+		saveButton.MoveTo(SAVE_X, SAVE_Y);
 	}
 
 	public void Update()
@@ -30,6 +37,8 @@ public class LevelEditor
 				Paint(click);
 			else if (IsWithinBrushSelector(click))
 				SelectBrush(click.Y);
+			else if (click.X == SAVE_X && click.Y == SAVE_Y)
+				Save();
 		}
 	}
 
@@ -40,6 +49,8 @@ public class LevelEditor
 
 	public void Draw()
 	{
+		saveButton.Draw();
+
 		GridPosition brushSelector = new GridPosition(17, 0);
 		Vector2 pos = brushSelector.ToVector();
 
@@ -71,6 +82,7 @@ public class LevelEditor
 		else if (brush == 10)
 		{
 			Player.MoveTo(position);
+			Target.StartingPlayerPosition = position;
 			Target.Empty(Player.Index);
 		}
 	}
@@ -98,5 +110,17 @@ public class LevelEditor
 		var newObstacle = new Interractable(gameAtlas, type);
 		newObstacle.MoveTo(pos);
 		Target.Add(newObstacle);
+	}
+
+	void Save()
+	{
+		string s = Target.Serialize();
+		string fileName = LevelLoader.GetLevelPath(7);
+
+		if (File.Exists(fileName))
+			File.Delete(fileName);
+
+		using (StreamWriter sw = File.CreateText(fileName))
+			sw.Write(s.ToCharArray());
 	}
 }

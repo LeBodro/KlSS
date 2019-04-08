@@ -1,6 +1,6 @@
 public class Interractable : Sprite
 {
-	protected Collectible.Type key;
+	public Collectible.Type key { get; protected set; }
 
 	public Interractable(SpriteSheet sheet, Collectible.Type _key) : base(sheet, (int)_key)
 	{
