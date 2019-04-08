@@ -190,6 +190,7 @@ public class Level
 
 	public void Add(Collectible item)
 	{
+		walls[item.Index] = false;
 		RemoveAt(item.Index);
 		items.Add(item);
 		if (item.type == Collectible.Type.HEART)
@@ -198,6 +199,7 @@ public class Level
 
 	public void Add(Interractable obstacle)
 	{
+		walls[obstacle.Index] = false;
 		RemoveAt(obstacle.Index);
 		obstacles.Add(obstacle);
 	}
