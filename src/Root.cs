@@ -92,8 +92,10 @@ namespace MonoGame
 
 		void LoadNextLevel()
 		{
-			// TODO: if in level editor, this should load a wall-filled basic level template
-			currentLevel = (currentLevel + 1) % loader.LevelCount;
+			if (isInLevelEditMode)
+				currentLevel = (currentLevel + 1) % (LevelLoader.LevelCount + 1);
+			else
+				currentLevel = (currentLevel + 1) % LevelLoader.LevelCount;
 			LoadLevel();
 		}
 
@@ -114,6 +116,7 @@ namespace MonoGame
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
 			editor.Target = playingLevel;
+			editor.LevelId = currentLevel;
 		}
 
 		void ToggleLevelEditor()

@@ -16,6 +16,7 @@ public class LevelEditor
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
+	public int LevelId { get; set; }
 
 	public LevelEditor(SpriteSheet _gameAtlas, SpriteSheet _editorAtlas)
 	{
@@ -115,10 +116,12 @@ public class LevelEditor
 	void Save()
 	{
 		string s = Target.Serialize();
-		string fileName = LevelLoader.GetLevelPath(7);
+		string fileName = LevelLoader.GetLevelPath(LevelId);
 
 		if (File.Exists(fileName))
 			File.Delete(fileName);
+		else
+			LevelLoader.LevelCount++;
 
 		using (StreamWriter sw = File.CreateText(fileName))
 			sw.Write(s.ToCharArray());

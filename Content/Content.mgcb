@@ -142,6 +142,9 @@
 /processorParam:Quality=Best
 /build:step.wav
 
+#begin TEMPLATE.txt
+/copy:TEMPLATE.txt
+
 #begin walls12.png
 /importer:TextureImporter
 /processor:TextureProcessor

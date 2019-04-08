@@ -29,7 +29,7 @@ public class LevelLoader
 	SpriteSheet atlas;
 	ContentManager content;
 
-	public int LevelCount { get; private set; }
+	public static int LevelCount;
 
 	public static string GetLevelPath(int id)
 	{
@@ -59,6 +59,8 @@ public class LevelLoader
 		items.Clear();
 		obstacles.Clear();
 		string fileName = GetLevelPath(levelId);
+		if (!File.Exists(fileName))
+			fileName = "Content/TEMPLATE.txt";
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
 			for (int j = 0; j < GridPosition.GRID_SIZE; j++)
