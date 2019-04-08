@@ -15,7 +15,7 @@ version: 2
     - run: dotnet build KlSS.csproj --configuration $BUILDCONFIGURATION
     - run: dotnet publish -r $BUILDPLATFORM --configuration $BUILDCONFIGURATION /p:TrimUnusedDependencies=true
     - run: apt-get update && apt-get install -y zip
-    - run: zip -r ~/repo/KlSS.zip ~/repo/bin/release/netcoreapp2.2/$BUILDPLATFORM/publish
+    - run: cd ~/repo/bin/release/netcoreapp2.2/$BUILDPLATFORM/publish && zip -r ~/repo/KlSS.zip ./
     - store_artifacts:
         path: ~/repo/KlSS.zip
 
