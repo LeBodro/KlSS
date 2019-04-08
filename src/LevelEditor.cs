@@ -24,6 +24,7 @@ public class LevelEditor
 		if (mouse.LeftButton == ButtonState.Pressed)
 		{
 			GridPosition gridPos = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
+			System.Console.Write(gridPos.ToString());
 			if (gridPos.X < GridPosition.GRID_SIZE)
 				Paint(gridPos);
 			else if (IsWithinBrushSelector(gridPos))
