@@ -9,6 +9,7 @@ export BUILD_CONFIGURATION='release'
 export ARTIFACT_FILENAME=${PROJECT_NAME}-${BUILD_PLATFORM}.zip
 export ARTIFACTS_DIR=/root/repo/artifacts
 export ARTIFACT_FULL_PATH=${ARTIFACTS_DIR}/${ARTIFACT_FILENAME}
+export WORKSPACE_DIR=/tmp/workspace
 
 export PUBLISH_DIR=/root/repo/bin/release/netcoreapp2.2/${BUILD_PLATFORM}/publish
 export MGCB_VERSION=3.7.0.4
@@ -32,3 +33,6 @@ dotnet publish -r ${BUILD_PLATFORM} --configuration ${BUILD_CONFIGURATION} /p:Tr
 # artifacts
 mkdir -p ${ARTIFACTS_DIR}
 cd ${PUBLISH_DIR} && zip -r ${ARTIFACT_FULL_PATH} ./
+
+# also add the build to workspace for deployment
+cp ${ARTIFACT_FULL_PATH} ${ARTIFACT_FULL_PATH}/

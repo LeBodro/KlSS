@@ -1,34 +1,44 @@
 version: 2
 
-.job_configuration: &job_configuration
-  docker:
-    - image: gableroux/dotnet-mono-monogame:latest
-  working_directory: ~/repo
-  steps:
-    - checkout
-    - run: ci/build.sh
-    - store_artifacts:
-        path: ~/repo/artifacts/
+references:
+  workspace_root: &workspace_root
+    /tmp/workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+  build: &build
+    docker:
+      - image: gableroux/dotnet-mono-monogame:latest
+    working_directory: ~/repo
+    workspace: ~/repo/artifacts
+    steps:
+      - checkout
+      - *attach_workspace
+      - run: ci/build.sh
+      - store_artifacts:
+          path: ~/repo/artifacts/
 jobs:
   windows:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'win-x64'
   linux:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'linux-x64'
   macos:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'osx-x64'
   deploy:
     docker:
       - image: dosowisko/butler:latest
     steps:
-      - run: butler --help
-      - run: ls -la ~/repo/artifacts
-      #- run: butler push ~/repo/artifacts $ITCHIO_USER/$ITCHIO_GAME:$ITCHIO_CHANNEL
+      - checkout
+      - *attach_workspace
+      - run: ci/deploy.sh
 
 workflows:
   version: 2
