@@ -81,7 +81,7 @@ namespace MonoGame
 			inputs.Map(Keys.Space, Command.Event.JUST_DOWN, LoadLevel);
 			inputs.Map(Keys.PageUp, Command.Event.JUST_DOWN, LoadNextLevel);
 			inputs.Map(Keys.PageDown, Command.Event.JUST_DOWN, LoadPreviousLevel);
-			inputs.Map(Keys.E, Command.Event.JUST_DOWN, ToggleLevelEditor);
+			inputs.Map(Keys.Tab, Command.Event.JUST_DOWN, ToggleLevelEditor);
 		}
 
 		void MovePlayer(Sprite.Direction direction)
