@@ -8,8 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class LevelLoader
 {
-	const string LEVEL_NAME = "{0}/level{1}.txt";
-
 	const string EMPTY = ".";
 	const string WALL = "#";
 	const string SWORD = "B";
