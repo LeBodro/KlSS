@@ -19,9 +19,9 @@ references:
       - store_artifacts:
           path: ~/repo/artifacts/
       - persist_to_workspace:
-          root: *workspace_root
+          root: ~/repo/artifacts/
           paths:
-            - /tmp/workspace/
+            - .
 jobs:
   windows:
     <<: *build
