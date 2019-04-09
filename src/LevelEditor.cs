@@ -5,8 +5,9 @@ using MonoGame;
 
 public class LevelEditor
 {
-	const int SAVE_X = 17;
+	const int MENU_X = 17;
 	const int SAVE_Y = 15;
+	const int NUMBER_Y = 13;
 
 	SpriteSheet gameAtlas;
 	SpriteSheet editorAtlas;
@@ -23,7 +24,7 @@ public class LevelEditor
 		gameAtlas = _gameAtlas;
 		editorAtlas = _editorAtlas;
 		saveButton = new Sprite(editorAtlas, 12);
-		saveButton.MoveTo(SAVE_X, SAVE_Y);
+		saveButton.MoveTo(MENU_X, SAVE_Y);
 	}
 
 	public void Update()
@@ -38,7 +39,7 @@ public class LevelEditor
 				Paint(click);
 			else if (IsWithinBrushSelector(click))
 				SelectBrush(click.Y);
-			else if (click.X == SAVE_X && click.Y == SAVE_Y)
+			else if (click.X == MENU_X && click.Y == SAVE_Y)
 				Save();
 		}
 	}
@@ -51,7 +52,23 @@ public class LevelEditor
 	public void Draw()
 	{
 		saveButton.Draw();
+		DrawLevelNumber();
+		DrawBrushes();
+	}
 
+	void DrawLevelNumber()
+	{
+		int tens = LevelId / 10;
+		int units = LevelId % 10;
+		GridPosition pos = new GridPosition(MENU_X, NUMBER_Y);
+
+		editorAtlas.Draw(tens, pos.ToVector());
+		pos.X++;
+		editorAtlas.Draw(units, pos.ToVector());
+	}
+
+	void DrawBrushes()
+	{
 		GridPosition brushSelector = new GridPosition(17, 0);
 		Vector2 pos = brushSelector.ToVector();
 
