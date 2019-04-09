@@ -38,13 +38,13 @@ workflows:
       - linux
       - macos
       - deploy:
-        requires:
-          - windows
-          - linux
-          - macos
-        filters:
-          branches:
-            - only:
-              - master
-              - circleci-deploy-itchio # TODO: delete this line once merge request is merged
-    
+          requires:
+            - windows
+            - linux
+            - macos
+          filters:
+            branches:
+              only:
+                - master
+                - circleci-deploy-itchio # TODO: delete this line once merge request is merged
+
