@@ -22,6 +22,7 @@ namespace MonoGame
 		LevelEditor editor;
 		int currentLevel = 0;
 		bool isInLevelEditMode = false;
+		bool isTransitionning = false;
 
 		public Root()
 		{
@@ -90,6 +91,19 @@ namespace MonoGame
 			playingLevel.UpdateStep();
 		}
 
+		void ProgressJob()
+		{
+			System.Threading.Thread.Sleep(1000);
+			LoadNextLevel();
+			isTransitionning = false;
+		}
+
+		void ProgressToNextLevel()
+		{
+			isTransitionning = true;
+			new System.Threading.Thread(ProgressJob).Start();
+		}
+
 		void LoadNextLevel()
 		{
 			if (isInLevelEditMode)
@@ -111,7 +125,7 @@ namespace MonoGame
 			if (isInLevelEditMode)
 				playingLevel.OnDone += LoadLevel;
 			else
-				playingLevel.OnDone += LoadNextLevel;
+				playingLevel.OnDone += ProgressToNextLevel;
 			player.Reset();
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
@@ -124,13 +138,13 @@ namespace MonoGame
 			isInLevelEditMode = !isInLevelEditMode;
 			if (isInLevelEditMode)
 			{
-				playingLevel.OnDone -= LoadNextLevel;
+				playingLevel.OnDone -= ProgressToNextLevel;
 				playingLevel.OnDone += LoadLevel;
 			}
 			else
 			{
 				playingLevel.OnDone -= LoadLevel;
-				playingLevel.OnDone += LoadNextLevel;
+				playingLevel.OnDone += ProgressToNextLevel;
 			}
 			graphics.PreferredBackBufferWidth += (isInLevelEditMode ? 1 : -1) * GridPosition.CELL_SIZE * 3 * SCALE;
 			graphics.ApplyChanges();
@@ -141,10 +155,14 @@ namespace MonoGame
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
-			inputs.Update();
+			// No game inputs taken during transitions
+			if (!isTransitionning)
+			{
+				inputs.Update();
 
-			if (isInLevelEditMode)
-				editor.Update();
+				if (isInLevelEditMode)
+					editor.Update();
+			}
 
 			base.Update(gameTime);
 		}
