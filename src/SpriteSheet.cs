@@ -26,7 +26,7 @@ public class SpriteSheet
 	public void Draw(int cellId, Vector2 pos)
 	{
 		cellRect.X = cellId % columns * cellWidth;
-		cellRect.Y = cellId / rows * cellHeight;
+		cellRect.Y = cellId / columns * cellHeight;
 		Begin();
 		spriteBatch.Draw(atlas, pos, cellRect, Color.White);
 		spriteBatch.End();

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Microsoft.Xna.Framework;
 
 public class Level
@@ -11,7 +12,7 @@ public class Level
 	HashSet<Collectible> items = new HashSet<Collectible>();
 	HashSet<Interractable> obstacles = new HashSet<Interractable>();
 
-	public GridPosition StartingPlayerPosition { get; private set; }
+	public GridPosition StartingPlayerPosition { get; set; }
 
 	public event System.Action OnDone = delegate { };
 
@@ -87,7 +88,7 @@ public class Level
 			{
 				p.X = i % SIZE * GridPosition.CELL_SIZE;
 				p.Y = i / SIZE * GridPosition.CELL_SIZE;
-				sheet.Draw(0, p);
+				sheet.Draw(9, p);
 			}
 		}
 
@@ -148,5 +149,100 @@ public class Level
 				return item;
 		}
 		return null;
+	}
+
+	public void SetWall(int index)
+	{
+		RemoveAt(index);
+		walls[index] = true;
+	}
+
+	public void Empty(int index)
+	{
+		if (walls[index])
+			walls[index] = false;
+		else
+			RemoveAt(index);
+	}
+
+	public void RemoveAt(int index)
+	{
+		if (!walls[index])
+		{
+			Collectible dItem = null;
+			foreach (var item in items)
+				if (item.Index == index)
+					dItem = item;
+			items.Remove(dItem);
+			if (dItem != null)
+			{
+				if (dItem.type == Collectible.Type.HEART)
+					dItem.OnDeath -= EndLevel;
+				dItem.Kill();
+			}
+			Interractable dObstacle = null;
+			foreach (var item in obstacles)
+				if (item.Index == index)
+					dObstacle = item;
+			obstacles.Remove(dObstacle);
+			if (dObstacle != null) dObstacle.Kill();
+		}
+	}
+
+	public void Add(Collectible item)
+	{
+		walls[item.Index] = false;
+		RemoveAt(item.Index);
+		items.Add(item);
+		if (item.type == Collectible.Type.HEART)
+			item.OnDeath += EndLevel;
+	}
+
+	public void Add(Interractable obstacle)
+	{
+		walls[obstacle.Index] = false;
+		RemoveAt(obstacle.Index);
+		obstacles.Add(obstacle);
+	}
+
+	public string Serialize()
+	{
+		StringBuilder builder = new StringBuilder();
+
+		IDictionary<int, char> tiles = new Dictionary<int, char>(256);
+		for (int i = 0; i < 256; i++)
+		{
+			tiles[i] = walls[i] ? '#' : '.';
+		}
+		var mapping = new Dictionary<Collectible.Type, char>()
+		{
+			{Collectible.Type.HEART, 'H'},
+			{Collectible.Type.KEY, 'K'},
+			{Collectible.Type.SWORD, 'B'},
+			{Collectible.Type.SHIELD, 'S'},
+		};
+		foreach (var item in items)
+			tiles[item.Index] = mapping[item.type];
+
+		mapping = new Dictionary<Collectible.Type, char>()
+		{
+			{Collectible.Type.HEART, 'L'},
+			{Collectible.Type.KEY, 'D'},
+			{Collectible.Type.SWORD, 'M'},
+			{Collectible.Type.SHIELD, 'F'},
+		};
+		foreach (var obstacle in obstacles)
+			tiles[obstacle.Index] = mapping[obstacle.key];
+
+		tiles[StartingPlayerPosition.Index] = 'P';
+
+		for (int i = 0; i < 256; i++)
+		{
+			builder.Append(tiles[i]);
+			if ((i + 1) % 16 == 0 && i < 255)
+				builder.AppendLine();
+		}
+
+		return builder.ToString();
 	}
 }

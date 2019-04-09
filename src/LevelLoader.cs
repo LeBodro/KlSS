@@ -8,8 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 public class LevelLoader
 {
-	const string LEVEL_NAME = "{0}/level{1}.txt";
-
 	const string EMPTY = ".";
 	const string WALL = "#";
 	const string SWORD = "B";
@@ -26,25 +24,30 @@ public class LevelLoader
 	HashSet<Collectible> items = new HashSet<Collectible>();
 	HashSet<Interractable> obstacles = new HashSet<Interractable>();
 
-	SpriteBatch spriteBatch;
+	SpriteSheet atlas;
 	ContentManager content;
-	SpriteSheet collectibleSheet;
-	SpriteSheet obstacleSheet;
-	SpriteSheet wallSheet;
 
-	public LevelLoader(SpriteBatch _spriteBatch, ContentManager _content)
+	public static int LevelCount;
+
+	public static string GetLevelPath(int id)
 	{
-		spriteBatch = _spriteBatch;
-		content = _content;
-		collectibleSheet = LoadSpriteSheet("collectibles" + GridPosition.CELL_SIZE, 2, 2);
-		obstacleSheet = LoadSpriteSheet("obstacles" + GridPosition.CELL_SIZE, 2, 2);
-		wallSheet = LoadSpriteSheet("walls" + GridPosition.CELL_SIZE, 2, 2);
+		return Path.Combine(".", "Content", "level" + id + ".txt");
 	}
 
-	SpriteSheet LoadSpriteSheet(string textureName, int rows, int columns)
+	public LevelLoader(SpriteSheet _atlas, ContentManager _content)
 	{
-		var texture = content.Load<Texture2D>(textureName);
-		return new SpriteSheet(spriteBatch, texture, rows, columns);
+		atlas = _atlas;
+		content = _content;
+		LevelCount = GetLevelCount();
+	}
+
+	int GetLevelCount()
+	{
+		string partialName = "level";
+		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, content.RootDirectory));
+		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.txt");
+
+		return filesInDir.Length;
 	}
 
 	public Level Load(int levelId)
@@ -53,7 +56,9 @@ public class LevelLoader
 		walls.SetAll(false);
 		items.Clear();
 		obstacles.Clear();
-		string fileName = string.Format(LEVEL_NAME, content.RootDirectory, levelId);
+		string fileName = GetLevelPath(levelId);
+		if (!File.Exists(fileName))
+			Path.Combine(".", "Content", "TEMPLATE.txt");
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
 			for (int j = 0; j < GridPosition.GRID_SIZE; j++)
@@ -99,19 +104,19 @@ public class LevelLoader
 				}
 			}
 		}
-		return new Level(walls, items, obstacles, wallSheet, playerPosition);
+		return new Level(walls, items, obstacles, atlas, playerPosition);
 	}
 
 	void CreateItem(Collectible.Type type, int x, int y)
 	{
-		var newItem = new Collectible(collectibleSheet, type);
+		var newItem = new Collectible(atlas, type);
 		newItem.MoveTo(x, y);
 		items.Add(newItem);
 	}
 
 	void CreateObstacle(Collectible.Type type, int x, int y)
 	{
-		var newObstacle = new Interractable(obstacleSheet, type);
+		var newObstacle = new Interractable(atlas, type);
 		newObstacle.MoveTo(x, y);
 		obstacles.Add(newObstacle);
 	}

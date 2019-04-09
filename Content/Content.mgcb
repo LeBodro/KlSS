@@ -13,6 +13,18 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin atlas8.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:atlas8.png
+
 #begin collectibles12.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -43,6 +55,18 @@
 /processorParam:Quality=Best
 /build:destroy.wav
 
+#begin editorAtlas.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:editorAtlas.png
+
 #begin level0.txt
 /copy:level0.txt
 
@@ -60,6 +84,9 @@
 
 #begin level5.txt
 /copy:level5.txt
+
+#begin level6.txt
+/copy:level6.txt
 
 #begin obstacles12.png
 /importer:TextureImporter
@@ -114,6 +141,9 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:step.wav
+
+#begin TEMPLATE.txt
+/copy:TEMPLATE.txt
 
 #begin walls12.png
 /importer:TextureImporter
