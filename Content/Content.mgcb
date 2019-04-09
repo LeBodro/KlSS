@@ -73,6 +73,21 @@
 #begin level1.txt
 /copy:level1.txt
 
+#begin level10.txt
+/copy:level10.txt
+
+#begin level11.txt
+/copy:level11.txt
+
+#begin level12.txt
+/copy:level12.txt
+
+#begin level13.txt
+/copy:level13.txt
+
+#begin level14.txt
+/copy:level14.txt
+
 #begin level2.txt
 /copy:level2.txt
 
@@ -87,6 +102,15 @@
 
 #begin level6.txt
 /copy:level6.txt
+
+#begin level7.txt
+/copy:level7.txt
+
+#begin level8.txt
+/copy:level8.txt
+
+#begin level9.txt
+/copy:level9.txt
 
 #begin obstacles12.png
 /importer:TextureImporter
