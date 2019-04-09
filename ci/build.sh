@@ -35,4 +35,4 @@ mkdir -p ${ARTIFACTS_DIR}
 cd ${PUBLISH_DIR} && zip -r ${ARTIFACT_FULL_PATH} ./
 
 # also add the build to workspace for deployment
-cp ${ARTIFACT_FULL_PATH} ${ARTIFACT_FULL_PATH}/
+cp ${ARTIFACT_FULL_PATH} ${WORKSPACE_DIR}/
