@@ -19,6 +19,11 @@ public class GridPosition
 		return new GridPosition(x / SCALED_CELL_SIZE, y / SCALED_CELL_SIZE);
 	}
 
+	public static GridPosition FromGridIndex(int index)
+	{
+		return new GridPosition(index % GRID_SIZE, index / GRID_SIZE);
+	}
+
 	public GridPosition(int x = 0, int y = 0)
 	{
 		_x = x;
@@ -49,9 +54,21 @@ public class GridPosition
 		return base.GetHashCode();
 	}
 
+	public void SetFromIndex(int index)
+	{
+		_x = index % GRID_SIZE;
+		_y = index / GRID_SIZE;
+		Index = index;
+	}
+
 	public Vector2 ToVector()
 	{
 		return CELL_SIZE * new Vector2(X, Y);
+	}
+
+	public static Vector2 ToVector(int x, int y)
+	{
+		return CELL_SIZE * new Vector2(x, y);
 	}
 
 	public override string ToString()

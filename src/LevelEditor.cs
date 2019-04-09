@@ -73,6 +73,7 @@ public class LevelEditor
 		saveButton.Draw();
 		DrawLevelNumber();
 		DrawBrushes();
+		DrawCursor();
 	}
 
 	void DrawLevelNumber()
@@ -95,12 +96,12 @@ public class LevelEditor
 		{
 			gameAtlas.Draw(i, pos);
 			pos.Y += GridPosition.CELL_SIZE;
-			if (brush == i)
-			{
-				GridPosition cursor = new GridPosition(16, i);
-				editorAtlas.Draw(14, cursor.ToVector());
-			}
 		}
+	}
+
+	void DrawCursor()
+	{
+		editorAtlas.Draw(14, GridPosition.ToVector(MENU_X - 1, brush));
 	}
 
 	void Paint(GridPosition position)
@@ -132,7 +133,6 @@ public class LevelEditor
 	void SelectBrush(int index)
 	{
 		brush = index;
-		// TODO: indicate selection
 	}
 
 	void CreateItem(Collectible.Type type, GridPosition pos)
@@ -151,6 +151,8 @@ public class LevelEditor
 
 	void Save()
 	{
+		Target.StartingPlayerPosition.SetFromIndex(Player.Index);
+
 		string s = Target.Serialize();
 		string fileName = LevelLoader.GetLevelPath(LevelId);
 
