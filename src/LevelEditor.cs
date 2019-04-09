@@ -8,12 +8,14 @@ public class LevelEditor
 	const int MENU_X = 17;
 	const int SAVE_Y = 15;
 	const int NUMBER_Y = 13;
+	const int SCROLL_THRESHOLD = 13500;
 
 	SpriteSheet gameAtlas;
 	SpriteSheet editorAtlas;
 	MouseState mouse;
 	int brush;
 	Sprite saveButton;
+	int lastScroll;
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
@@ -49,6 +51,15 @@ public class LevelEditor
 
 			if (click.X < GridPosition.GRID_SIZE)
 				Target.Empty(click.Index);
+		}
+		if (mouse.ScrollWheelValue != 0)
+		{
+			int delta = mouse.ScrollWheelValue - lastScroll;
+			if (delta * delta > SCROLL_THRESHOLD)
+			{
+				brush = MathHelper.Clamp(brush + (delta > 0 ? 1 : -1), 0, 10);
+				lastScroll = mouse.ScrollWheelValue;
+			}
 		}
 	}
 
