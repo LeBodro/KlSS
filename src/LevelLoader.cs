@@ -33,7 +33,7 @@ public class LevelLoader
 
 	public static string GetLevelPath(int id)
 	{
-		return string.Format(LEVEL_NAME, "Content", id);
+		return Path.Combine(".", "Content", "level" + id + ".txt");
 	}
 
 	public LevelLoader(SpriteSheet _atlas, ContentManager _content)
@@ -60,7 +60,7 @@ public class LevelLoader
 		obstacles.Clear();
 		string fileName = GetLevelPath(levelId);
 		if (!File.Exists(fileName))
-			fileName = "Content/TEMPLATE.txt";
+			Path.Combine(".", "Content", "TEMPLATE.txt");
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
 			for (int j = 0; j < GridPosition.GRID_SIZE; j++)
