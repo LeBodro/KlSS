@@ -34,6 +34,11 @@ public class LevelLoader
 		return Path.Combine(".", "Content", "level" + id + ".txt");
 	}
 
+	public static string GetFullLevelPath(int id)
+	{
+		return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "level" + id + ".txt");
+	}
+
 	public LevelLoader(SpriteSheet _atlas, ContentManager _content)
 	{
 		atlas = _atlas;
@@ -46,7 +51,7 @@ public class LevelLoader
 		string partialName = "level";
 		string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
 		var directory = System.IO.Path.GetDirectoryName(path);
-		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(directory, content.RootDirectory));
+		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.GetDirectoryName(GetFullLevelPath(0)));
 		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.txt");
 
 		return filesInDir.Length;
@@ -59,8 +64,8 @@ public class LevelLoader
 		items.Clear();
 		obstacles.Clear();
 		string fileName = GetLevelPath(levelId);
-		if (!File.Exists(fileName))
-			Path.Combine(".", "Content", "TEMPLATE.txt");
+		if (!File.Exists(GetFullLevelPath(levelId)))
+			fileName = Path.Combine(".", "Content", "TEMPLATE.txt");
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
 			for (int j = 0; j < GridPosition.GRID_SIZE; j++)

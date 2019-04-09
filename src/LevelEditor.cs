@@ -154,7 +154,7 @@ public class LevelEditor
 		Target.StartingPlayerPosition.SetFromIndex(Player.Index);
 
 		string s = Target.Serialize();
-		string fileName = LevelLoader.GetLevelPath(LevelId);
+		string fileName = LevelLoader.GetFullLevelPath(LevelId);
 
 		if (File.Exists(fileName))
 			File.Delete(fileName);
