@@ -44,7 +44,9 @@ public class LevelLoader
 	int GetLevelCount()
 	{
 		string partialName = "level";
-		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, content.RootDirectory));
+		string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
+		var directory = System.IO.Path.GetDirectoryName(path);
+		DirectoryInfo hdDirectoryInWhichToSearch = new DirectoryInfo(Path.Combine(directory, content.RootDirectory));
 		FileInfo[] filesInDir = hdDirectoryInWhichToSearch.GetFiles(partialName + "*.txt");
 
 		return filesInDir.Length;
