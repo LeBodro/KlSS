@@ -42,6 +42,14 @@ public class LevelEditor
 			else if (click.X == MENU_X && click.Y == SAVE_Y)
 				Save();
 		}
+		else if (mouse.RightButton == ButtonState.Pressed)
+		{
+			GridPosition click = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
+			if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+
+			if (click.X < GridPosition.GRID_SIZE)
+				Target.Empty(click.Index);
+		}
 	}
 
 	bool IsOutOfBounds(GridPosition pos)
