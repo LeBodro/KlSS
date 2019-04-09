@@ -1,0 +1,32 @@
+version: 2
+
+.job_configuration: &job_configuration
+  docker:
+    - image: gableroux/dotnet-mono-monogame:latest
+  working_directory: ~/repo
+  steps:
+    - checkout
+    - run: ci/build.sh
+    - store_artifacts:
+        path: ~/repo/artifacts/
+jobs:
+  windows:
+    <<: *job_configuration
+    environment:
+      BUILD_PLATFORM: 'win-x64'
+  linux:
+    <<: *job_configuration
+    environment:
+      BUILD_PLATFORM: 'linux-x64'
+  macos:
+    <<: *job_configuration
+    environment:
+      BUILD_PLATFORM: 'osx-x64'
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - windows
+      - linux
+      - macos
