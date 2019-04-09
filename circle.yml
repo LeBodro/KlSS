@@ -20,6 +20,8 @@ references:
           path: ~/repo/artifacts/
       - persist_to_workspace:
           root: *workspace_root
+          paths:
+            - /tmp/workspace/
 jobs:
   windows:
     <<: *build
