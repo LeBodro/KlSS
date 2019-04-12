@@ -39,7 +39,6 @@ public class Command
 				repeat[k] -= time;
 				if (repeat[k] <= 0 && justDown.ContainsKey(k))
 				{
-					System.Console.WriteLine(time.ToString());
 					justDown[k]();
 					repeat[k] = REPETITION;
 				}
