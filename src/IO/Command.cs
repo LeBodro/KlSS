@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework.Input;
 
 public class Command
 {
+	const double REPETITION = 0.16f;
+
 	public enum Event
 	{
 		JUST_DOWN,
@@ -14,9 +16,10 @@ public class Command
 	IDictionary<Keys, System.Action> justDown = new Dictionary<Keys, System.Action>();
 	IDictionary<Keys, System.Action> justUp = new Dictionary<Keys, System.Action>();
 	IDictionary<Keys, System.Action> down = new Dictionary<Keys, System.Action>();
+	IDictionary<Keys, double> repeat = new Dictionary<Keys, double>();
 	HashSet<Keys> downKeys = new HashSet<Keys>();
 
-	public void Update()
+	public void Update(double time)
 	{
 		kstate = Keyboard.GetState();
 		var unpressedKeys = new HashSet<Keys>(downKeys);
@@ -26,10 +29,24 @@ public class Command
 			{
 				downKeys.Add(k);
 				if (justDown.ContainsKey(k))
+				{
 					justDown[k]();
+					repeat[k] = REPETITION;
+				}
+			}
+			else if (justDown.ContainsKey(k))
+			{
+				repeat[k] -= time;
+				if (repeat[k] <= 0 && justDown.ContainsKey(k))
+				{
+					System.Console.WriteLine(time.ToString());
+					justDown[k]();
+					repeat[k] = REPETITION;
+				}
 			}
 			if (down.ContainsKey(k))
 				down[k]();
+
 			unpressedKeys.Remove(k);
 		}
 
@@ -38,6 +55,7 @@ public class Command
 			if (justUp.ContainsKey(k))
 				justUp[k]();
 			downKeys.Remove(k);
+			repeat.Remove(k);
 		}
 	}
 

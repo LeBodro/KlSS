@@ -158,7 +158,7 @@ namespace MonoGame
 			// No game inputs taken during transitions
 			if (!isTransitionning)
 			{
-				inputs.Update();
+				inputs.Update(gameTime.ElapsedGameTime.TotalSeconds);
 
 				if (isInLevelEditMode)
 					editor.Update();
