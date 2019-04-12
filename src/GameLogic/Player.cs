@@ -21,6 +21,7 @@ public class Player : Sprite
 		foreach (var item in attachedItems.Values)
 			if (CurrentLevel.IsImpassible(item.Index, (int)direction)) return;
 
+		AudioLibrary.Instance.Play("Step");
 		base.Move(direction);
 		foreach (var item in attachedItems.Values)
 			item.Move(direction);

@@ -69,9 +69,6 @@ public class Level
 			}
 		}
 
-		if (itemsToDestroy.Count == 0)
-			AudioLibrary.Instance.Play("Step");
-
 		foreach (var item in itemsToDestroy)
 		{
 			item.Kill();
