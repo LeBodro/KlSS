@@ -7,6 +7,7 @@ namespace MonoGame
 {
 	class Root : Game
 	{
+		public const double LEVEL_TRANSITION_DELAY = 1;
 		public const int SCALE = 4;
 		public const int SIZE_LENGTH = SCALE * GridPosition.CELL_SIZE * GridPosition.GRID_SIZE;
 
@@ -22,6 +23,7 @@ namespace MonoGame
 		LevelEditor editor;
 		int currentLevel = 0;
 		bool isInLevelEditMode = false;
+		double delayToNextLevel;
 		bool isTransitionning = false;
 
 		public Root()
@@ -91,9 +93,8 @@ namespace MonoGame
 			playingLevel.UpdateStep();
 		}
 
-		void ProgressJob()
+		void EndTransition()
 		{
-			System.Threading.Thread.Sleep(1000);
 			LoadNextLevel();
 			isTransitionning = false;
 		}
@@ -101,7 +102,7 @@ namespace MonoGame
 		void ProgressToNextLevel()
 		{
 			isTransitionning = true;
-			new System.Threading.Thread(ProgressJob).Start();
+			delayToNextLevel = LEVEL_TRANSITION_DELAY;
 		}
 
 		void LoadNextLevel()
@@ -155,13 +156,20 @@ namespace MonoGame
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 
+			double deltaTime = gameTime.ElapsedGameTime.TotalSeconds;
 			// No game inputs taken during transitions
 			if (!isTransitionning)
 			{
-				inputs.Update(gameTime.ElapsedGameTime.TotalSeconds);
+				inputs.Update(deltaTime);
 
 				if (isInLevelEditMode)
 					editor.Update();
+			}
+			else
+			{
+				delayToNextLevel -= deltaTime;
+				if (delayToNextLevel <= 0)
+					EndTransition();
 			}
 
 			base.Update(gameTime);
