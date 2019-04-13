@@ -2,21 +2,30 @@ using System.Collections.Generic;
 
 public class TextSprite
 {
+	public enum Alignement
+	{
+		LEFT,
+		RIGHT,
+		CENTER
+	}
+
 	const int LETTER_OFFSET = -81;
 
 	SpriteSheet font;
 	GridPosition position;
 	IList<int> sequence;
 	string text;
+	Alignement alignement;
 
 	IDictionary<char, int> symbolMapping = new Dictionary<char, int>()
 	{
-		{':', 26},
-		{'-', 27},
-		{' ', 28}
+		{':', 42},
+		{'-', 43},
+		{' ', 44},
+		{'/', 45}
 	};
 
-	public TextSprite(SpriteSheet _font, int x = 0, int y = 0)
+	public TextSprite(SpriteSheet _font, Alignement align = Alignement.LEFT, int x = 0, int y = 0)
 	{
 		font = _font;
 		position = new GridPosition(x, y);
@@ -36,6 +45,11 @@ public class TextSprite
 	public void Draw()
 	{
 		GridPosition cache = new GridPosition(position);
+		if (alignement == Alignement.RIGHT)
+			cache.X -= sequence.Count + 1;
+		else if (alignement == Alignement.CENTER)
+			cache.X -= (sequence.Count - 1) / 2;
+
 		for (int i = 0; i < sequence.Count; i++)
 		{
 			font.Draw(sequence[i], cache.ToVector());
