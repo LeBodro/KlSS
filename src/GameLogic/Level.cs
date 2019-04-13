@@ -13,8 +13,8 @@ public class Level
 	HashSet<Interractable> obstacles = new HashSet<Interractable>();
 
 	public GridPosition StartingPlayerPosition { get; set; }
-
 	public event System.Action OnDone = delegate { };
+	public int Score { get; private set; }
 
 	public Level(BitArray _walls, HashSet<Collectible> _items, HashSet<Interractable> _obstacles, SpriteSheet _sheet, GridPosition startingPlayerPosition)
 	{
@@ -48,6 +48,7 @@ public class Level
 		foreach (var obstacle in obstaclesToDestroy)
 			obstacles.Remove(obstacle);
 
+		Score += obstaclesToDestroy.Count * 4;
 		return obstaclesToDestroy.Count > 0;
 	}
 
@@ -65,7 +66,6 @@ public class Level
 					if (item.type != Collectible.Type.HEART)
 						AudioLibrary.Instance.Play("Destroy");
 				}
-
 			}
 		}
 
@@ -74,6 +74,8 @@ public class Level
 			item.Kill();
 			items.Remove(item);
 		}
+
+		Score += itemsToDestroy.Count * 4;
 	}
 
 	public void Draw()

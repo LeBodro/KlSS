@@ -27,6 +27,7 @@ namespace MonoGame
 		double delayToNextLevel;
 		bool isTransitionning = false;
 		TextSprite progression;
+		TextSprite score;
 
 		public Root()
 		{
@@ -73,6 +74,7 @@ namespace MonoGame
 
 			// Prepare UI
 			progression = new TextSprite(systemAtlas, TextSprite.Alignement.RIGHT, 15, 16);
+			score = new TextSprite(systemAtlas, TextSprite.Alignement.LEFT, 0, 16);
 
 			// Player inputs
 			inputs = new Command();
@@ -166,6 +168,7 @@ namespace MonoGame
 			if (!isTransitionning)
 			{
 				inputs.Update(deltaTime);
+				score.SetText(playingLevel.Score.ToString());
 
 				if (isInLevelEditMode)
 					editor.Update();
@@ -187,7 +190,10 @@ namespace MonoGame
 			GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			playingLevel.Draw();
 			player.Draw();
+
+			// UI
 			progression.Draw();
+			score.Draw();
 
 			if (isInLevelEditMode)
 				editor.Draw();
