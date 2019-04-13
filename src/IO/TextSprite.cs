@@ -10,6 +10,7 @@ public class TextSprite
 	}
 
 	const int LETTER_OFFSET = -81;
+	const int NUMBER_OFFSET = -48;
 
 	SpriteSheet font;
 	GridPosition position;
@@ -29,6 +30,7 @@ public class TextSprite
 	{
 		font = _font;
 		position = new GridPosition(x, y);
+		alignement = align;
 	}
 
 	public void SetText(string _text)
@@ -36,17 +38,25 @@ public class TextSprite
 		text = _text.ToLower();
 		sequence = new List<int>(_text.Length);
 		foreach (char c in _text)
-			if (c >= 'a' && c <= 'z')
-				sequence.Add(c + LETTER_OFFSET);
-			else if (symbolMapping.ContainsKey(c))
-				sequence.Add(symbolMapping[c]);
+			sequence.Add(ToSheetCell(c));
+	}
+
+	int ToSheetCell(char c)
+	{
+		if (c >= 'a' && c <= 'z')
+			return c + LETTER_OFFSET;
+		else if (c >= '0' && c <= '9')
+			return c + NUMBER_OFFSET;
+		else if (symbolMapping.ContainsKey(c))
+			return symbolMapping[c];
+		return symbolMapping[' '];
 	}
 
 	public void Draw()
 	{
 		GridPosition cache = new GridPosition(position);
 		if (alignement == Alignement.RIGHT)
-			cache.X -= sequence.Count + 1;
+			cache.X -= sequence.Count - 1;
 		else if (alignement == Alignement.CENTER)
 			cache.X -= (sequence.Count - 1) / 2;
 

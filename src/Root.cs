@@ -10,6 +10,7 @@ namespace MonoGame
 		public const double LEVEL_TRANSITION_DELAY = 1;
 		public const int SCALE = 4;
 		public const int SIZE_LENGTH = SCALE * GridPosition.CELL_SIZE * GridPosition.GRID_SIZE;
+		const string PROGRESSION = "{0}/{1}";
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -25,13 +26,14 @@ namespace MonoGame
 		bool isInLevelEditMode = false;
 		double delayToNextLevel;
 		bool isTransitionning = false;
+		TextSprite progression;
 
 		public Root()
 		{
 			graphics = new GraphicsDeviceManager(this);
 
 			graphics.PreferredBackBufferWidth = SIZE_LENGTH;
-			graphics.PreferredBackBufferHeight = SIZE_LENGTH;
+			graphics.PreferredBackBufferHeight = SIZE_LENGTH + GridPosition.SCALED_CELL_SIZE;
 			graphics.PreferMultiSampling = false;
 
 			Content.RootDirectory = "Content";
@@ -42,11 +44,7 @@ namespace MonoGame
 
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
-
 			base.Initialize();
-
-			Log.Print("Terminal Active\n");
 		}
 
 		protected override void LoadContent()
@@ -59,19 +57,22 @@ namespace MonoGame
 			sounds.Add("Win", Content.Load<SoundEffect>("win"));
 			sounds.Add("Step", Content.Load<SoundEffect>("step"));
 
-			// Preparing player
+			// Prepare spritesheets
 			atlasTex = Content.Load<Texture2D>("atlas" + GridPosition.CELL_SIZE);
 			atlas = new SpriteSheet(spriteBatch, atlasTex, 3, 4);
-			player = new Player(atlas, 10);
-
 			Texture2D editorTex = Content.Load<Texture2D>("editorAtlas");
-			SpriteSheet editorAtlas = new SpriteSheet(spriteBatch, editorTex, 8, 8);
+			SpriteSheet systemAtlas = new SpriteSheet(spriteBatch, editorTex, 8, 8);
+
+			// Prepare player
+			player = new Player(atlas, 10);
 
 			// Prepare level loading
 			loader = new LevelLoader(atlas, Content);
-			editor = new LevelEditor(atlas, editorAtlas);
+			editor = new LevelEditor(atlas, systemAtlas);
 			editor.Player = player;
-			LoadLevel();
+
+			// Prepare UI
+			progression = new TextSprite(systemAtlas, TextSprite.Alignement.RIGHT, 15, 16);
 
 			// Player inputs
 			inputs = new Command();
@@ -85,6 +86,9 @@ namespace MonoGame
 			inputs.Map(Keys.PageUp, Command.Event.JUST_DOWN, LoadNextLevel);
 			inputs.Map(Keys.PageDown, Command.Event.JUST_DOWN, LoadPreviousLevel);
 			inputs.Map(Keys.Tab, Command.Event.JUST_DOWN, ToggleLevelEditor);
+
+			// Load title screen level
+			LoadLevel();
 		}
 
 		void MovePlayer(Sprite.Direction direction)
@@ -132,6 +136,7 @@ namespace MonoGame
 			player.CurrentLevel = playingLevel;
 			editor.Target = playingLevel;
 			editor.LevelId = currentLevel;
+			progression.SetText(string.Format(PROGRESSION, currentLevel + 1, LevelLoader.LevelCount));
 		}
 
 		void ToggleLevelEditor()
@@ -182,6 +187,7 @@ namespace MonoGame
 			GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 			playingLevel.Draw();
 			player.Draw();
+			progression.Draw();
 
 			if (isInLevelEditMode)
 				editor.Draw();
