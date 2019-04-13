@@ -31,6 +31,13 @@ public class GridPosition
 		Index = X + GRID_SIZE * Y;
 	}
 
+	public GridPosition(GridPosition pos)
+	{
+		_x = pos.X;
+		_y = pos.Y;
+		Index = X + GRID_SIZE * Y;
+	}
+
 	public static bool operator ==(GridPosition a, GridPosition b)
 	{
 		return a.X == b.X && a.Y == b.Y;
