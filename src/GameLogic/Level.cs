@@ -14,10 +14,10 @@ public class Level
 
 	public GridPosition StartingPlayerPosition { get; set; }
 	public event System.Action OnDone = delegate { };
-	public int Score { get; private set; }
 
 	public Level(BitArray _walls, HashSet<Collectible> _items, HashSet<Interractable> _obstacles, SpriteSheet _sheet, GridPosition startingPlayerPosition)
 	{
+		Score.Reset();
 		walls = _walls;
 		items = _items;
 		obstacles = _obstacles;
@@ -48,7 +48,7 @@ public class Level
 		foreach (var obstacle in obstaclesToDestroy)
 			obstacles.Remove(obstacle);
 
-		Score += obstaclesToDestroy.Count * 4;
+		Score.Increase(obstaclesToDestroy.Count * 4);
 		return obstaclesToDestroy.Count > 0;
 	}
 
@@ -75,7 +75,7 @@ public class Level
 			items.Remove(item);
 		}
 
-		Score += itemsToDestroy.Count * 4;
+		Score.Increase(itemsToDestroy.Count * 4);
 	}
 
 	public void Draw()

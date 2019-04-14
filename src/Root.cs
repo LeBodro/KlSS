@@ -168,7 +168,7 @@ namespace MonoGame
 			if (!isTransitionning)
 			{
 				inputs.Update(deltaTime);
-				score.SetText(playingLevel.Score.ToString());
+				score.SetText(Score.Total);
 
 				if (isInLevelEditMode)
 					editor.Update();

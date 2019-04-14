@@ -33,6 +33,11 @@ public class TextSprite
 		alignement = align;
 	}
 
+	public void SetText(object _text)
+	{
+		SetText(_text.ToString());
+	}
+
 	public void SetText(string _text)
 	{
 		text = _text.ToLower();

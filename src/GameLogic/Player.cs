@@ -22,6 +22,7 @@ public class Player : Sprite
 			if (CurrentLevel.IsImpassible(item.Index, (int)direction)) return;
 
 		AudioLibrary.Instance.Play("Step");
+		Score.Increase(1);
 		base.Move(direction);
 		foreach (var item in attachedItems.Values)
 			item.Move(direction);
