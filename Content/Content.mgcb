@@ -160,6 +160,12 @@
 /processorParam:TextureFormat=Color
 /build:player8.png
 
+#begin savegame.txt
+/copy:savegame.txt
+
+#begin savegame.txt.backup
+/copy:savegame.txt.backup
+
 #begin step.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,7 +28,20 @@ public class LevelLoader
 	SpriteSheet atlas;
 	ContentManager content;
 
-	public static int LevelCount;
+	static int _levelCount = -1;
+	public static int LevelCount
+	{
+		get
+		{
+			if (_levelCount == -1)
+				_levelCount = GetLevelCount();
+			return _levelCount;
+		}
+		set
+		{
+			_levelCount = value;
+		}
+	}
 
 	public static string GetLevelPath(int id)
 	{
@@ -43,10 +57,10 @@ public class LevelLoader
 	{
 		atlas = _atlas;
 		content = _content;
-		LevelCount = GetLevelCount();
+		//DownloadLevelOfTheWeek(); // WORK IN PROGRESS
 	}
 
-	int GetLevelCount()
+	static int GetLevelCount()
 	{
 		string partialName = "level";
 		string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -112,6 +126,13 @@ public class LevelLoader
 			}
 		}
 		return new Level(walls, items, obstacles, atlas, playerPosition);
+	}
+
+	void DownloadLevelOfTheWeek()
+	{
+		WebClient Client = new WebClient();
+		Client.DownloadFile("https://raw.githubusercontent.com/LeBodro/KlSS/master/weekly.txt", GetFullLevelPath(LevelCount));
+		LevelCount++;
 	}
 
 	void CreateItem(Collectible.Type type, int x, int y)

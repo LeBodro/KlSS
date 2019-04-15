@@ -90,6 +90,7 @@ namespace MonoGame
 			inputs.Map(Keys.Tab, Command.Event.JUST_DOWN, ToggleLevelEditor);
 
 			// Load title screen level
+			SaveGame.Load();
 			LoadLevel();
 		}
 
@@ -128,7 +129,8 @@ namespace MonoGame
 
 		void LoadLevel()
 		{
-			playingLevel = loader.Load(currentLevel);
+			int levelId = SaveGame.GetLevelId(currentLevel);
+			playingLevel = loader.Load(levelId);
 			if (isInLevelEditMode)
 				playingLevel.OnDone += LoadLevel;
 			else
@@ -137,7 +139,7 @@ namespace MonoGame
 			player.MoveTo(playingLevel.StartingPlayerPosition);
 			player.CurrentLevel = playingLevel;
 			editor.Target = playingLevel;
-			editor.LevelId = currentLevel;
+			editor.LevelId = levelId;
 			progression.SetText(string.Format(PROGRESSION, currentLevel + 1, LevelLoader.LevelCount));
 		}
 
