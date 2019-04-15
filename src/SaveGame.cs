@@ -24,6 +24,15 @@ public class SaveGame
 
 	public static string FullPath { get; } = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "savegame.txt");
 	public static int LevelCount { get => Instance.data.Levels.Count; }
+	public static int Weekly
+	{
+		get => Instance.data.Weekly;
+		set
+		{
+			Instance.data.Weekly = value;
+			Instance._Save();
+		}
+	}
 
 	Data data;
 

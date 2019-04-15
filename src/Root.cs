@@ -50,6 +50,7 @@ namespace MonoGame
 
 		protected override void LoadContent()
 		{
+			SaveGame.Load();
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// Load sounds
@@ -90,7 +91,6 @@ namespace MonoGame
 			inputs.Map(Keys.Tab, Command.Event.JUST_DOWN, ToggleLevelEditor);
 
 			// Load title screen level
-			SaveGame.Load();
 			LoadLevel();
 		}
 

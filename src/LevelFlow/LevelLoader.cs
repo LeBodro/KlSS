@@ -57,7 +57,7 @@ public class LevelLoader
 	{
 		atlas = _atlas;
 		content = _content;
-		//DownloadLevelOfTheWeek(); // WORK IN PROGRESS
+		DownloadLevelOfTheWeek();
 	}
 
 	static int GetLevelCount()
@@ -130,9 +130,32 @@ public class LevelLoader
 
 	void DownloadLevelOfTheWeek()
 	{
-		WebClient Client = new WebClient();
-		Client.DownloadFile("https://raw.githubusercontent.com/LeBodro/KlSS/master/weekly.txt", GetFullLevelPath(LevelCount));
-		LevelCount++;
+		WebClient client = new WebClient();
+		int id = -1;
+		Console.WriteLine("Fetching new level.");
+		byte[] raw = client.DownloadData("https://raw.githubusercontent.com/LeBodro/KlSS/master/weekly.txt");
+		string data = System.Text.Encoding.ASCII.GetString(raw);
+		int length = data.IndexOf('\n');
+		string rawId = data.Substring(0, length + 1);
+		if (!int.TryParse(rawId, out id))
+			Console.WriteLine("Failed to parse \"" + rawId + "\" as id.");
+
+		if (id > SaveGame.Weekly)
+		{
+			Console.WriteLine("Adding downloaded level.");
+			data = data.Replace(rawId, string.Empty);
+			SaveGame.Weekly = id;
+			using (StreamWriter sw = File.CreateText(GetFullLevelPath(LevelCount)))
+				sw.Write(data.ToCharArray());
+			LevelCount++;
+			SaveGame.AddLevel();
+		}
+		else
+		{
+			Console.WriteLine("Already up to date.");
+		}
+
+
 	}
 
 	void CreateItem(Collectible.Type type, int x, int y)
