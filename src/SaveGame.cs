@@ -58,7 +58,7 @@ public class SaveGame
 		Instance._MoveLevelUp(index);
 	}
 
-	public static void SetHighScore(int index, int score)
+	public static void KeepHighScore(int index, int score)
 	{
 		Instance._SetHighScore(index, score);
 	}
@@ -127,7 +127,7 @@ public class SaveGame
 
 	void _SetHighScore(int index, int score)
 	{
-		if (score < data.Scores[index])
+		if (data.Scores[index] <= 0 || score < data.Scores[index])
 		{
 			data.Scores[index] = score;
 			_Save();

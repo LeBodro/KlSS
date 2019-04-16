@@ -69,13 +69,12 @@ public class Level
 			}
 		}
 
+		Score.Increase(itemsToDestroy.Count * 4);
 		foreach (var item in itemsToDestroy)
 		{
 			item.Kill();
 			items.Remove(item);
 		}
-
-		Score.Increase(itemsToDestroy.Count * 4);
 	}
 
 	public void Draw()

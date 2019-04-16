@@ -28,6 +28,7 @@ namespace MonoGame
 		bool isTransitionning = false;
 		TextSprite progression;
 		TextSprite score;
+		int currentHighScore;
 
 		public Root()
 		{
@@ -108,6 +109,7 @@ namespace MonoGame
 
 		void ProgressToNextLevel()
 		{
+			SaveGame.KeepHighScore(currentLevel, Score.Total);
 			isTransitionning = true;
 			delayToNextLevel = LEVEL_TRANSITION_DELAY;
 		}
@@ -141,6 +143,7 @@ namespace MonoGame
 			editor.Target = playingLevel;
 			editor.LevelId = levelId;
 			progression.SetText(string.Format(PROGRESSION, currentLevel + 1, LevelLoader.LevelCount));
+			currentHighScore = SaveGame.GetScore(currentLevel);
 		}
 
 		void ToggleLevelEditor()
@@ -170,7 +173,10 @@ namespace MonoGame
 			if (!isTransitionning)
 			{
 				inputs.Update(deltaTime);
-				score.SetText(Score.Total);
+				if (currentHighScore > 0)
+					score.SetText(string.Format(PROGRESSION, Score.Total, currentHighScore));
+				else
+					score.SetText(Score.Total);
 
 				if (isInLevelEditMode)
 					editor.Update();
