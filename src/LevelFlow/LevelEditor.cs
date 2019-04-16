@@ -157,9 +157,14 @@ public class LevelEditor
 		string fileName = LevelLoader.GetFullLevelPath(LevelId);
 
 		if (File.Exists(fileName))
+		{
 			File.Delete(fileName);
+		}
 		else
+		{
 			LevelLoader.LevelCount++;
+			SaveGame.AddLevel();
+		}
 
 		using (StreamWriter sw = File.CreateText(fileName))
 			sw.Write(s.ToCharArray());
