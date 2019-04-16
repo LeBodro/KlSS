@@ -1,27 +1,47 @@
 version: 2
 
-.job_configuration: &job_configuration
-  docker:
-    - image: gableroux/dotnet-mono-monogame:latest
-  working_directory: ~/repo
-  steps:
-    - checkout
-    - run: ci/build.sh
-    - store_artifacts:
-        path: ~/repo/artifacts/
+references:
+  workspace_root: &workspace_root
+    /tmp/workspace
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
+
+  build: &build
+    docker:
+      - image: gableroux/dotnet-mono-monogame:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - *attach_workspace
+      - run: ci/build.sh
+      - store_artifacts:
+          path: ~/repo/artifacts/
+      - persist_to_workspace:
+          root: ~/repo/artifacts/
+          paths:
+            - .
 jobs:
   windows:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'win-x64'
   linux:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'linux-x64'
   macos:
-    <<: *job_configuration
+    <<: *build
     environment:
       BUILD_PLATFORM: 'osx-x64'
+  deploy:
+    docker:
+      - image: dosowisko/butler:latest
+    steps:
+      - checkout
+      - *attach_workspace
+      - run: ci/deploy.sh
 
 workflows:
   version: 2
@@ -30,3 +50,14 @@ workflows:
       - windows
       - linux
       - macos
+      - deploy:
+          requires:
+            - windows
+            - linux
+            - macos
+          filters:
+            branches:
+              only:
+                - master
+                - circleci-deploy-itchio # TODO: delete this line once merge request is merged
+
