@@ -77,6 +77,7 @@ public class LevelLoader
 		walls.SetAll(false);
 		items.Clear();
 		obstacles.Clear();
+		string instruction = string.Empty;
 		string fileName = GetLevelPath(levelId);
 		if (!File.Exists(GetFullLevelPath(levelId)))
 			fileName = Path.Combine(".", "Content", "TEMPLATE.txt");
@@ -124,8 +125,12 @@ public class LevelLoader
 					}
 				}
 			}
+			instruction = reader.ReadLine();
 		}
-		return new Level(walls, items, obstacles, atlas, playerPosition);
+		Level level = new Level(walls, items, obstacles, atlas, playerPosition);
+		if (!string.IsNullOrWhiteSpace(instruction))
+			level.Instruction = instruction;
+		return level;
 	}
 
 	void DownloadLevelOfTheWeek()

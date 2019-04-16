@@ -28,6 +28,7 @@ namespace MonoGame
 		bool isTransitionning = false;
 		TextSprite progression;
 		TextSprite score;
+		TextSprite instruction;
 		int currentHighScore;
 
 		public Root()
@@ -75,6 +76,7 @@ namespace MonoGame
 			editor.Player = player;
 
 			// Prepare UI
+			instruction = new TextSprite(systemAtlas, TextSprite.Alignement.CENTER, 7, 14);
 			progression = new TextSprite(systemAtlas, TextSprite.Alignement.RIGHT, 15, 16);
 			score = new TextSprite(systemAtlas, TextSprite.Alignement.LEFT, 0, 16);
 
@@ -133,6 +135,7 @@ namespace MonoGame
 		{
 			int levelId = SaveGame.GetLevelId(currentLevel);
 			playingLevel = loader.Load(levelId);
+			instruction.SetText(playingLevel.Instruction);
 			if (isInLevelEditMode)
 				playingLevel.OnDone += LoadLevel;
 			else
@@ -200,6 +203,7 @@ namespace MonoGame
 			player.Draw();
 
 			// UI
+			instruction.Draw();
 			progression.Draw();
 			score.Draw();
 

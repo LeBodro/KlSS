@@ -14,6 +14,7 @@ public class Level
 
 	public GridPosition StartingPlayerPosition { get; set; }
 	public event System.Action OnDone = delegate { };
+	public string Instruction { get; set; }
 
 	public Level(BitArray _walls, HashSet<Collectible> _items, HashSet<Interractable> _obstacles, SpriteSheet _sheet, GridPosition startingPlayerPosition)
 	{

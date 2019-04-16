@@ -40,6 +40,11 @@ public class TextSprite
 
 	public void SetText(string _text)
 	{
+		if (string.IsNullOrEmpty(_text))
+		{
+			sequence = new List<int>(0);
+			return;
+		}
 		text = _text.ToLower();
 		sequence = new List<int>(_text.Length);
 		foreach (char c in _text)
