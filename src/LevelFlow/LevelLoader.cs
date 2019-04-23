@@ -79,7 +79,7 @@ public class LevelLoader
 		obstacles.Clear();
 		string instruction = string.Empty;
 		string fileName = GetLevelPath(levelId);
-		if (!File.Exists(GetFullLevelPath(levelId)))
+		if (levelId == -1 || !File.Exists(GetFullLevelPath(levelId)))
 			fileName = Path.Combine(".", "Content", "TEMPLATE.txt");
 		using (StreamReader reader = new StreamReader(TitleContainer.OpenStream(fileName)))
 		{
