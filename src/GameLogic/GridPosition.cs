@@ -19,6 +19,11 @@ public class GridPosition
 		return new GridPosition(x / SCALED_CELL_SIZE, y / SCALED_CELL_SIZE);
 	}
 
+	public static GridPosition FromWindowCoordinates(Point pos)
+	{
+		return new GridPosition(pos.X / SCALED_CELL_SIZE, pos.Y / SCALED_CELL_SIZE);
+	}
+
 	public static GridPosition FromGridIndex(int index)
 	{
 		return new GridPosition(index % GRID_SIZE, index / GRID_SIZE);
