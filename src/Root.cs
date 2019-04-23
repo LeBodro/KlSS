@@ -30,6 +30,7 @@ namespace MonoGame
 		TextSprite score;
 		TextSprite instruction;
 		int currentHighScore;
+		InGameUI bottomMenu = new InGameUI();
 
 		public Root()
 		{
@@ -79,6 +80,10 @@ namespace MonoGame
 			instruction = new TextSprite(systemAtlas, TextSprite.Alignement.CENTER, 7, 14);
 			progression = new TextSprite(systemAtlas, TextSprite.Alignement.RIGHT, 15, 16);
 			score = new TextSprite(systemAtlas, TextSprite.Alignement.LEFT, 0, 16);
+			bottomMenu.AddButton(new Sprite(systemAtlas, 10), delegate { currentLevel = 0; LoadLevel(); });
+			bottomMenu.AddButton(new Sprite(systemAtlas, 13), LoadPreviousLevel);
+			bottomMenu.AddButton(new Sprite(systemAtlas, 14), LoadNextLevel);
+			bottomMenu.AddButton(new Sprite(systemAtlas, 11), delegate { });
 
 			// Player inputs
 			inputs = new Command();
@@ -176,6 +181,7 @@ namespace MonoGame
 			if (!isTransitionning)
 			{
 				inputs.Update(deltaTime);
+				bottomMenu.Update();
 				if (currentHighScore > 0)
 					score.SetText(string.Format(PROGRESSION, Score.Total, currentHighScore));
 				else
@@ -206,6 +212,7 @@ namespace MonoGame
 			instruction.Draw();
 			progression.Draw();
 			score.Draw();
+			bottomMenu.Draw();
 
 			if (isInLevelEditMode)
 				editor.Draw();

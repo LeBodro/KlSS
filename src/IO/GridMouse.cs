@@ -8,7 +8,7 @@ public class GridMouseButton
 	public event Action<GridPosition> OnDrag;
 
 	GridPosition lastPosition = new GridPosition();
-	ButtonState lastState;
+	ButtonState lastState = ButtonState.Released;
 
 	public void Update(ButtonState state, GridPosition position)
 	{
@@ -37,7 +37,7 @@ public class GridMouse
 {
 	public GridMouseButton Left { get; private set; }
 	public GridMouseButton Right { get; private set; }
-	public event Action<int> OnScroll;
+	public event Action<int> OnScroll = delegate { };
 
 	MouseState mouse;
 	int lastWheelValue;

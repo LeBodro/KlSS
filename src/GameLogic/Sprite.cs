@@ -18,8 +18,8 @@ public class Sprite
 	List<int> adjacentCells;
 
 	public int Index { get => position.Index; }
-	protected int X { get => position.X; set => position.X = value; }
-	protected int Y { get => position.Y; set => position.Y = value; }
+	public int X { get => position.X; protected set => position.X = value; }
+	public int Y { get => position.Y; protected set => position.Y = value; }
 
 	protected event System.Action _onDeath = delegate { };
 	public event System.Action OnDeath
