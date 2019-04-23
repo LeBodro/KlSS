@@ -9,7 +9,6 @@ public class GridMouseButton
 
 	GridPosition lastPosition = new GridPosition();
 	ButtonState lastState;
-	bool wasDown;
 
 	public void Update(ButtonState state, GridPosition position)
 	{

@@ -12,10 +12,9 @@ public class LevelEditor
 
 	SpriteSheet gameAtlas;
 	SpriteSheet editorAtlas;
-	MouseState mouse;
+	GridMouse mouse = new GridMouse();
 	int brush;
 	Sprite saveButton;
-	int lastScroll;
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
@@ -27,40 +26,49 @@ public class LevelEditor
 		editorAtlas = _editorAtlas;
 		saveButton = new Sprite(editorAtlas, 12);
 		saveButton.MoveTo(MENU_X, SAVE_Y);
+
+		mouse.Left.OnClick += LeftClick;
+		mouse.Left.OnDrag += LeftDrag;
+		mouse.Right.OnClick += EraseTile;
+		mouse.Right.OnDrag += EraseTile;
+		mouse.OnScroll += Scroll;
+	}
+
+	void LeftClick(GridPosition click)
+	{
+		if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+
+		if (click.X < GridPosition.GRID_SIZE)
+			Paint(click);
+		else if (IsWithinBrushSelector(click))
+			SelectBrush(click.Y);
+		else if (click.X == MENU_X && click.Y == SAVE_Y)
+			Save();
+	}
+
+	void LeftDrag(GridPosition click)
+	{
+		if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+		if (click.X < GridPosition.GRID_SIZE)
+			Paint(click);
+	}
+
+	void EraseTile(GridPosition click)
+	{
+		if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+		if (click.X < GridPosition.GRID_SIZE)
+			Target.Empty(click.Index);
+	}
+
+	void Scroll(int delta)
+	{
+		if (delta * delta > SCROLL_THRESHOLD)
+			brush = MathHelper.Clamp(brush + (delta > 0 ? 1 : -1), 0, 10);
 	}
 
 	public void Update()
 	{
-		mouse = Mouse.GetState();
-		if (mouse.LeftButton == ButtonState.Pressed)
-		{
-			GridPosition click = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
-			if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
-
-			if (click.X < GridPosition.GRID_SIZE)
-				Paint(click);
-			else if (IsWithinBrushSelector(click))
-				SelectBrush(click.Y);
-			else if (click.X == MENU_X && click.Y == SAVE_Y)
-				Save();
-		}
-		else if (mouse.RightButton == ButtonState.Pressed)
-		{
-			GridPosition click = GridPosition.FromWindowCoordinates(mouse.X, mouse.Y);
-			if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
-
-			if (click.X < GridPosition.GRID_SIZE)
-				Target.Empty(click.Index);
-		}
-		if (mouse.ScrollWheelValue != 0)
-		{
-			int delta = mouse.ScrollWheelValue - lastScroll;
-			if (delta * delta > SCROLL_THRESHOLD)
-			{
-				brush = MathHelper.Clamp(brush + (delta > 0 ? 1 : -1), 0, 10);
-				lastScroll = mouse.ScrollWheelValue;
-			}
-		}
+		mouse.Update();
 	}
 
 	bool IsOutOfBounds(GridPosition pos)
