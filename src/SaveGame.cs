@@ -70,7 +70,7 @@ public class SaveGame
 
 	public static int GetLevelId(int id)
 	{
-		return id < Instance.data.Levels.Count ? Instance.data.Levels[id] : -1;
+		return id < Instance.data.Levels.Count ? Instance.data.Levels[id] : LevelCount;
 	}
 
 	public static int GetScore(int id)
