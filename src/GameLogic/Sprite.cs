@@ -13,7 +13,7 @@ public class Sprite
 	}
 
 	SpriteSheet sheet;
-	int cellId;
+	protected int cellId;
 	GridPosition position;
 	List<int> adjacentCells;
 

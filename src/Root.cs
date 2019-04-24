@@ -70,7 +70,8 @@ namespace MonoGame
 			SpriteSheet systemAtlas = new SpriteSheet(spriteBatch, editorTex, 8, 8);
 
 			// Prepare player
-			player = new Player(atlas, 10);
+			Texture2D playerAtlas = Content.Load<Texture2D>("playerAtlas");
+			player = new Player(new SpriteSheet(spriteBatch, playerAtlas, 4, 4), 0);
 
 			// Prepare level loading
 			loader = new LevelLoader(atlas, Content);

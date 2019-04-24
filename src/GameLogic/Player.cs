@@ -6,13 +6,12 @@ public class Player : Sprite
 
 	public Level CurrentLevel { get; set; }
 
-	public Player(SpriteSheet sheet, int cellId) : base(sheet, cellId)
-	{
-	}
+	public Player(SpriteSheet sheet, int cellId) : base(sheet, cellId) { }
 
 	public void Reset()
 	{
 		attachedItems.Clear();
+		cellId = 0;
 	}
 
 	public override void Move(Direction direction, int distance = 1)
@@ -45,11 +44,26 @@ public class Player : Sprite
 			if (fetchedItem != null)
 			{
 				attachedItems.Add(direction, fetchedItem);
-				fetchedItem.OnDeath += () => attachedItems.Remove(direction);
+				fetchedItem.OnDeath += () => { attachedItems.Remove(direction); RefreshCellId(); };
 				fetchedItem.IsCollected = true;
+				RefreshCellId();
 				return true;
 			}
 		}
 		return false;
+	}
+
+	void RefreshCellId()
+	{
+		var occupiedSlots = attachedItems.Keys;
+		int id = 0;
+		foreach (var direction in occupiedSlots)
+		{
+			if (direction == Direction.LEFT) id += 1;
+			if (direction == Direction.RIGHT) id += 2;
+			if (direction == Direction.UP) id += 4;
+			if (direction == Direction.DOWN) id += 8;
+		}
+		cellId = id;
 	}
 }
