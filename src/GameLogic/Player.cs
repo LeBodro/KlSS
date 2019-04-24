@@ -21,19 +21,23 @@ public class Player : Sprite
 		foreach (var item in attachedItems.Values)
 			if (CurrentLevel.IsImpassible(item.Index, (int)direction)) return;
 
-		AudioLibrary.Instance.Play("Step");
 		Score.Increase(1);
 		base.Move(direction);
 		foreach (var item in attachedItems.Values)
 			item.Move(direction);
 
-		FetchItemAt(Direction.UP);
-		FetchItemAt(Direction.DOWN);
-		FetchItemAt(Direction.LEFT);
-		FetchItemAt(Direction.RIGHT);
+		bool fetched = false;
+		fetched |= FetchItemAt(Direction.UP);
+		fetched |= FetchItemAt(Direction.DOWN);
+		fetched |= FetchItemAt(Direction.LEFT);
+		fetched |= FetchItemAt(Direction.RIGHT);
+		if (fetched)
+			AudioLibrary.Instance.Play("Stick");
+		else
+			AudioLibrary.Instance.Play("Step");
 	}
 
-	void FetchItemAt(Direction direction)
+	bool FetchItemAt(Direction direction)
 	{
 		if (!attachedItems.ContainsKey(direction))
 		{
@@ -43,7 +47,9 @@ public class Player : Sprite
 				attachedItems.Add(direction, fetchedItem);
 				fetchedItem.OnDeath += () => attachedItems.Remove(direction);
 				fetchedItem.IsCollected = true;
+				return true;
 			}
 		}
+		return false;
 	}
 }

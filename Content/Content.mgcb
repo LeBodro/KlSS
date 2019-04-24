@@ -172,6 +172,12 @@
 /processorParam:Quality=Best
 /build:step.wav
 
+#begin stick.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:stick.wav
+
 #begin TEMPLATE.txt
 /copy:TEMPLATE.txt
 
