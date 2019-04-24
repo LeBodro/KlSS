@@ -6,6 +6,7 @@ using MonoGame;
 public class LevelEditor
 {
 	const int MENU_X = 17;
+	const int NEW_LEVEL_Y = 14;
 	const int SAVE_Y = 15;
 	const int NUMBER_Y = 13;
 	const int SCROLL_THRESHOLD = 13500;
@@ -15,10 +16,13 @@ public class LevelEditor
 	GridMouse mouse = new GridMouse();
 	int brush;
 	Sprite saveButton;
+	Sprite newLevelButton;
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
 	public int LevelId { get; set; }
+
+	public event System.Action OnNewLevel = delegate { };
 
 	public LevelEditor(SpriteSheet _gameAtlas, SpriteSheet _editorAtlas)
 	{
@@ -26,6 +30,8 @@ public class LevelEditor
 		editorAtlas = _editorAtlas;
 		saveButton = new Sprite(editorAtlas, 12);
 		saveButton.MoveTo(MENU_X, SAVE_Y);
+		newLevelButton = new Sprite(editorAtlas, 15);
+		newLevelButton.MoveTo(MENU_X, NEW_LEVEL_Y);
 
 		mouse.Left.OnClick += LeftClick;
 		mouse.Left.OnDrag += LeftDrag;
@@ -44,6 +50,8 @@ public class LevelEditor
 			SelectBrush(click.Y);
 		else if (click.X == MENU_X && click.Y == SAVE_Y)
 			Save();
+		else if (click.X == MENU_X && click.Y == NEW_LEVEL_Y)
+			OnNewLevel();
 	}
 
 	void LeftDrag(GridPosition click)
@@ -79,7 +87,9 @@ public class LevelEditor
 	public void Draw()
 	{
 		saveButton.Draw();
-		DrawLevelNumber();
+		newLevelButton.Draw();
+
+		//DrawLevelNumber();
 		DrawBrushes();
 		DrawCursor();
 	}

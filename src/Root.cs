@@ -75,6 +75,7 @@ namespace MonoGame
 			loader = new LevelLoader(atlas, Content);
 			editor = new LevelEditor(atlas, systemAtlas);
 			editor.Player = player;
+			editor.OnNewLevel += delegate { currentLevel = SaveGame.LevelCount; LoadLevel(); };
 
 			// Prepare UI
 			instruction = new TextSprite(systemAtlas, TextSprite.Alignement.CENTER, 7, 14);
@@ -83,7 +84,7 @@ namespace MonoGame
 			bottomMenu.AddButton(new Sprite(systemAtlas, 10), delegate { currentLevel = 0; LoadLevel(); });
 			bottomMenu.AddButton(new Sprite(systemAtlas, 13), LoadPreviousLevel);
 			bottomMenu.AddButton(new Sprite(systemAtlas, 14), LoadNextLevel);
-			bottomMenu.AddButton(new Sprite(systemAtlas, 11), delegate { });
+			bottomMenu.AddButton(new Sprite(systemAtlas, 11), delegate { currentLevel = SaveGame.LevelCount - 1; LoadLevel(); });
 
 			// Player inputs
 			inputs = new Command();

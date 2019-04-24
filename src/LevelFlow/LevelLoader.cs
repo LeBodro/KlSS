@@ -135,9 +135,15 @@ public class LevelLoader
 
 	void DownloadLevelOfTheWeek()
 	{
+		Console.WriteLine("Fetching new level.");
+		try { FetchLevelOnline(); }
+		catch (System.Net.WebException e) { Console.WriteLine(string.Format("Could not reach level: {0}", e.Message)); }
+	}
+
+	void FetchLevelOnline()
+	{
 		WebClient client = new WebClient();
 		int id = -1;
-		Console.WriteLine("Fetching new level.");
 		byte[] raw = client.DownloadData("https://raw.githubusercontent.com/LeBodro/KlSS/master/weekly.txt");
 		string data = System.Text.Encoding.ASCII.GetString(raw);
 		int length = data.IndexOf('\n');
@@ -159,8 +165,6 @@ public class LevelLoader
 		{
 			Console.WriteLine("Already up to date.");
 		}
-
-
 	}
 
 	void CreateItem(Collectible.Type type, int x, int y)
