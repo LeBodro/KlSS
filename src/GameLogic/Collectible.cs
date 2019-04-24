@@ -17,6 +17,21 @@ public class Collectible : Sprite
 		type = _type;
 	}
 
+	public override void Draw()
+	{
+		if (IsCollected)
+		{
+			bool normalFill = Time.currentMilliseconds / 250 % 2 == 0;
+			if (cellId < 8 && !normalFill)
+				cellId += 8;
+			else if (cellId >= 8 && normalFill)
+				cellId -= 8;
+		}
+
+
+		base.Draw();
+	}
+
 	public override void Move(Direction direction, int distance = 1)
 	{
 		base.Move(direction, distance);

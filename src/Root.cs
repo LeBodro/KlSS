@@ -65,7 +65,7 @@ namespace MonoGame
 
 			// Prepare spritesheets
 			atlasTex = Content.Load<Texture2D>("atlas" + GridPosition.CELL_SIZE);
-			atlas = new SpriteSheet(spriteBatch, atlasTex, 3, 4);
+			atlas = new SpriteSheet(spriteBatch, atlasTex, 4, 4);
 			Texture2D editorTex = Content.Load<Texture2D>("editorAtlas");
 			SpriteSheet systemAtlas = new SpriteSheet(spriteBatch, editorTex, 8, 8);
 
@@ -176,6 +176,8 @@ namespace MonoGame
 
 		protected override void Update(GameTime gameTime)
 		{
+			Time.Update(gameTime);
+
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 

@@ -35,7 +35,7 @@ public class Sprite
 		position = new GridPosition(0, 0);
 	}
 
-	public void Draw()
+	public virtual void Draw()
 	{
 		sheet.Draw(cellId, position.ToVector());
 	}
