@@ -28,7 +28,6 @@ public class Collectible : Sprite
 				cellId -= 8;
 		}
 
-
 		base.Draw();
 	}
 
