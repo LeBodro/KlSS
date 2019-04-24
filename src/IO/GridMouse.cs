@@ -4,11 +4,14 @@ using Microsoft.Xna.Framework.Input;
 
 public class GridMouseButton
 {
-	public event Action<GridPosition> OnClick;
-	public event Action<GridPosition> OnDrag;
+	public event Action<GridPosition> OnClick = delegate { };
+	public event Action<GridPosition> OnDrag = delegate { };
 
 	GridPosition lastPosition = new GridPosition();
 	ButtonState lastState = ButtonState.Released;
+
+	bool Pressed(ButtonState s) => s == ButtonState.Pressed;
+	bool Moved(GridPosition p) => p != lastPosition;
 
 	public void Update(ButtonState state, GridPosition position)
 	{
@@ -28,9 +31,6 @@ public class GridMouseButton
 		lastPosition = position;
 		lastState = state;
 	}
-
-	bool Pressed(ButtonState s) => s == ButtonState.Pressed;
-	bool Moved(GridPosition p) => p != lastPosition;
 }
 
 public class GridMouse
