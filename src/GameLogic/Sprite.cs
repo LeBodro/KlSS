@@ -12,6 +12,14 @@ public class Sprite
 		NONE = 0,
 	}
 
+	// LERP
+	const float LERP_DURATION = 0.1f;
+	const float INVERT_LERP = 1.0f / LERP_DURATION;
+	double lerpStart;
+	Vector2 previousPosition = new Vector2();
+	Vector2 displayPosition = new Vector2();
+	//
+
 	SpriteSheet sheet;
 	protected int cellId;
 	GridPosition position;
@@ -41,7 +49,14 @@ public class Sprite
 
 	public virtual void Draw()
 	{
-		sheet.Draw(cellId, position.ToVector());
+		float elapsed = (float)(Time.totalSeconds - lerpStart);
+		displayPosition = position.ToVector();
+		if (elapsed < LERP_DURATION)
+		{
+			float t = MathHelper.Min(elapsed * INVERT_LERP, 1f);
+			displayPosition = previousPosition + (float)t * (displayPosition - previousPosition);
+		}
+		sheet.Draw(cellId, displayPosition);
 	}
 
 	public void MoveTo(int x, int y)
@@ -60,6 +75,8 @@ public class Sprite
 
 	public virtual void Move(Direction direction)
 	{
+		previousPosition = displayPosition;
+		lerpStart = Time.totalSeconds;
 		Index += (int)direction;
 		RefreshAdjacentCells();
 	}
