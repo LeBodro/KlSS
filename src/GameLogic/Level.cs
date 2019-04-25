@@ -100,6 +100,12 @@ public class Level
 
 	public bool IsImpassible(int tileIndex, int indexDelta)
 	{
+		Collectible unused = null;
+		return IsImpassible(tileIndex, indexDelta, ref unused);
+	}
+
+	public bool IsImpassible(int tileIndex, int indexDelta, ref Collectible pushableItem)
+	{
 		int indexToCheck = tileIndex + indexDelta;
 		if (ContainsObstacle(indexToCheck))
 			return true;
@@ -111,7 +117,7 @@ public class Level
 		{
 			if (!item.IsCollected && item.Index == indexToCheck)
 			{
-				if (couldPushItem) item.Move((Sprite.Direction)indexDelta);
+				if (couldPushItem) pushableItem = item;
 				else return true;
 			}
 		}

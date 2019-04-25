@@ -16,13 +16,21 @@ public class Player : Sprite
 
 	public override void Move(Direction direction, int distance = 1)
 	{
+		List<Collectible> pushables = new List<Collectible>(4);
 		if (CurrentLevel.IsImpassible(Index, (int)direction)) return;
 		foreach (var item in attachedItems.Values)
-			if (CurrentLevel.IsImpassible(item.Index, (int)direction)) return;
+		{
+			Collectible pushable = null;
+			if (CurrentLevel.IsImpassible(item.Index, (int)direction, ref pushable)) return;
+			if (pushable != null)
+				pushables.Add(pushable);
+		}
 
 		Score.Increase(1);
 		base.Move(direction);
 		foreach (var item in attachedItems.Values)
+			item.Move(direction);
+		foreach (var item in pushables)
 			item.Move(direction);
 
 		bool fetched = false;
