@@ -17,7 +17,11 @@ public class Sprite
 	GridPosition position;
 	List<int> adjacentCells;
 
-	public int Index { get => position.Index; }
+	public int Index
+	{
+		get => position.Index;
+		protected set => position = GridPosition.FromGridIndex(value);
+	}
 	public int X { get => position.X; protected set => position.X = value; }
 	public int Y { get => position.Y; protected set => position.Y = value; }
 
@@ -54,25 +58,9 @@ public class Sprite
 		RefreshAdjacentCells();
 	}
 
-	public virtual void Move(Direction direction, int distance = 1)
+	public virtual void Move(Direction direction)
 	{
-		switch (direction)
-		{
-			case Direction.UP:
-				Y -= distance;
-				break;
-			case Direction.DOWN:
-				Y += distance;
-				break;
-			case Direction.LEFT:
-				X -= distance;
-				break;
-			case Direction.RIGHT:
-				X += distance;
-				break;
-			default:
-				break;
-		}
+		Index += (int)direction;
 		RefreshAdjacentCells();
 	}
 

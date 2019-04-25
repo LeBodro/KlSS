@@ -31,9 +31,9 @@ public class Collectible : Sprite
 		base.Draw();
 	}
 
-	public override void Move(Direction direction, int distance = 1)
+	public override void Move(Direction direction)
 	{
-		base.Move(direction, distance);
+		base.Move(direction);
 		HasMoved = true;
 	}
 }

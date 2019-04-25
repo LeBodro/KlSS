@@ -14,7 +14,7 @@ public class Player : Sprite
 		cellId = 0;
 	}
 
-	public override void Move(Direction direction, int distance = 1)
+	public override void Move(Direction direction)
 	{
 		List<Collectible> pushables = new List<Collectible>(4);
 		if (CurrentLevel.IsImpassible(Index, (int)direction)) return;
