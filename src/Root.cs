@@ -62,6 +62,7 @@ namespace MonoGame
 			sounds.Add("Win", Content.Load<SoundEffect>("win"));
 			sounds.Add("Step", Content.Load<SoundEffect>("step"));
 			sounds.Add("Stick", Content.Load<SoundEffect>("stick"));
+			sounds.Add("Save", Content.Load<SoundEffect>("save"));
 
 			// Prepare spritesheets
 			atlasTex = Content.Load<Texture2D>("atlas" + GridPosition.CELL_SIZE);

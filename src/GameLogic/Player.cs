@@ -5,7 +5,6 @@ public class Player : Sprite
 	IDictionary<Direction, Collectible> attachedItems = new Dictionary<Direction, Collectible>(4);
 
 	public Level CurrentLevel { get; set; }
-
 	public Player(SpriteSheet sheet, int cellId) : base(sheet, cellId) { }
 
 	public void Reset()

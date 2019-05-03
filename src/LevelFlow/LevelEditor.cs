@@ -17,6 +17,8 @@ public class LevelEditor
 	int brush;
 	Sprite saveButton;
 	Sprite newLevelButton;
+	bool changesPending;
+	int lastPlayerIndex;
 
 	public Level Target { get; set; }
 	public Player Player { get; set; }
@@ -64,6 +66,7 @@ public class LevelEditor
 	void EraseTile(GridPosition click)
 	{
 		if (IsOutOfBounds(click)) return; // Nothing to do out of bounds
+		changesPending = true;
 		if (click.X < GridPosition.GRID_SIZE)
 			Target.Empty(click.Index);
 	}
@@ -76,6 +79,11 @@ public class LevelEditor
 
 	public void Update()
 	{
+		if (Player.Index != lastPlayerIndex)
+		{
+			lastPlayerIndex = Player.Index;
+			changesPending = true;
+		}
 		mouse.Update();
 	}
 
@@ -86,7 +94,8 @@ public class LevelEditor
 
 	public void Draw()
 	{
-		saveButton.Draw();
+		if (changesPending)
+			saveButton.Draw();
 		newLevelButton.Draw();
 
 		//DrawLevelNumber();
@@ -126,6 +135,7 @@ public class LevelEditor
 	{
 		if (brush < 0 || brush > 10) return; // Invalid brush ID
 		if (Player.Index == position.Index) return; // Can't overwrite player
+		changesPending = true;
 
 		if (brush < 4)
 			CreateObstacle((Collectible.Type)brush, position);
@@ -169,6 +179,8 @@ public class LevelEditor
 
 	void Save()
 	{
+		if (!changesPending) return;
+
 		Target.StartingPlayerPosition.SetFromIndex(Player.Index);
 
 		string s = Target.Serialize();
@@ -186,5 +198,8 @@ public class LevelEditor
 
 		using (StreamWriter sw = File.CreateText(fileName))
 			sw.Write(s.ToCharArray());
+
+		changesPending = false;
+		AudioLibrary.Instance.Play("Save");
 	}
 }
